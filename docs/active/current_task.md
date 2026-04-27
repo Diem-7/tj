@@ -2,47 +2,39 @@
 
 ## Mode
 
-`execute_task`
+`review_task`
 
 ## Task
 
-Implement Slice 2: Instruments.
+Review Slice 2: Instruments.
 
-## Result
+## Review Scope
 
-Implementation completed.
+- verify dependencies
+- format changed Dart files
+- run static analysis
+- run tests
+- review database version 2 migration
+- review `instruments` table shape
+- review idempotent `NQ` and `MNQ` seeds
+- review data/domain/presentation boundaries
+- review Riverpod provider wiring
+- review simple German instrument UI
+- confirm no trade, setup, filter, performance, dashboard, or export scope was added
+- confirm every file stays under 300 lines
 
-## Completed Scope
+## Review Result
 
-- added `Instrument` domain model
-- added instrument repository contract
-- added SQLite `instruments` table in database version 2
-- added migration from database version 1 to version 2
-- seeded initial instruments `NQ` and `MNQ`
-- added SQLite instrument mapper and repository
-- added Riverpod providers for instruments
-- added simple German instrument list UI
-- added bottom navigation for accounts and instruments
-- added database test for instrument seeds
-- updated widget test for the new navigation
+Review completed.
 
-## Out Of Scope Kept
-
-- trade creation
-- setup selection
-- filters
-- performance calculations
-- dashboard changes
-- import/export
-- instrument edit or delete workflows
-- free-text instrument creation
+No code issues were found.
 
 ## Verification
 
 Run after outside-sandbox approval:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed with no changes
 - `flutter analyze` passed with no issues
 - `flutter test` passed
 

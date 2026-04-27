@@ -2,33 +2,33 @@
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-Slice 2 has been implemented and verified. A review should check boundaries,
-migration behavior, seed correctness, UI scope, and file sizes before moving to
-the next slice.
+Slice 2 has been implemented, verified, and reviewed. The next implementation
+slice needs a defined and accepted scope before code changes continue.
 
-## Review Target
+## Suggested Next Slice
 
-Slice 2: Instruments
+Slice 3: Trades foundation
 
-Review:
+Potential scope:
 
-- database version 2 migration
-- `instruments` table shape
-- idempotent `NQ` and `MNQ` seeds
-- data/domain/presentation boundaries
-- Riverpod provider wiring
-- simple German instrument UI
-- test coverage
-- file size rule
+- trade domain model
+- trade validation rules
+- trade SQLite table migration
+- trade repository contract
+- simple trade list shell
 
-## Still Out Of Scope
+## Needs Definition Before Implementation
 
-- trades
-- setups
+- exact first trade workflow fields
+- whether setup selection waits until setup seeds are defined
+- how trade creation handles optional setup in the first slice
+
+## Still Out Of Scope Until Defined
+
 - filters
 - performance calculations
 - dashboard

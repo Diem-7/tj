@@ -2,33 +2,24 @@
 
 ## Summary
 
-Slice 2 was implemented. Instruments now have domain, data, repository,
-provider, database, seed, test, and simple UI support. The app now exposes
-Konten and Instrumente through bottom navigation.
+Slice 2 was reviewed. Instruments remain implemented with domain, data,
+repository, provider, database, seed, test, and simple UI support. No review
+findings were found.
 
 ## Files Changed
 
-- `lib/data/database/app_database.dart`
-- `lib/data/instruments/instrument_mapper.dart`
-- `lib/data/instruments/sqlite_instrument_repository.dart`
-- `lib/domain/instruments/instrument.dart`
-- `lib/domain/instruments/instrument_repository.dart`
-- `lib/main.dart`
-- `lib/presentation/app_home.dart`
-- `lib/presentation/instruments/instrument_providers.dart`
-- `lib/presentation/instruments/instruments_screen.dart`
-- `test/app_database_test.dart`
-- `test/widget_test.dart`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
 ## Not Changed
 
-- account domain model
-- account repository behavior
-- trade model or trade workflows
-- setup model or setup workflows
+- app code
+- database schema
+- account behavior
+- instrument implementation
+- trades
+- setups
 - filters
 - dashboard
 - performance calculations
@@ -49,9 +40,13 @@ Still open for later slices:
 Run after outside-sandbox approval:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed with no changes
 - `flutter analyze` passed with no issues
 - `flutter test` passed
+
+## Review Findings
+
+No findings.
 
 ## Suggested Commit Message
 
@@ -61,9 +56,9 @@ feat: add instrument foundation
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-The implementation is complete and verified. A review should confirm the slice
-boundaries and database migration before defining the next implementation slice.
+Slice 2 is complete and reviewed. The next slice should be defined before more
+code changes begin.
