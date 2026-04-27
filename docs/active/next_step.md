@@ -2,28 +2,29 @@
 
 ## Recommended Next Mode
 
-`define_task`
+`execute_task`
 
 ## Reason
 
-Slice 1 has been implemented and reviewed. The next slice needs a defined and
-accepted scope before new implementation starts.
+Slice 2 is now defined. Implementation can start once this scope is accepted.
 
-## Suggested Next Slice
+## Implementation Target
 
 Slice 2: Instruments
 
-Potential scope:
+Implement only the instrument foundation:
 
-- instrument domain model
-- instrument SQLite table
-- initial `NQ` and `MNQ` seeds
-- instrument repository
-- instrument list UI
+- domain model
+- repository contract
+- SQLite migration and seeds
+- data mapper and repository
+- Riverpod providers
+- simple German list UI
 
-## Still Out Of Scope Until Defined
+## Still Out Of Scope
 
 - trades
+- setups
 - filters
 - performance calculations
 - dashboard

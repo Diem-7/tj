@@ -2,32 +2,31 @@
 
 ## Summary
 
-Slice 1 was reviewed. Verification commands were initiated by Codex with
-outside-sandbox approval. Two review fixes were applied: one deprecated Flutter
-API was replaced, and the widget test was wrapped in `ProviderScope`.
+Slice 2 was defined as the instrument foundation. The task scope, exclusions,
+acceptance criteria, and required verification commands were documented.
 
 ## Files Changed
 
-- `lib/presentation/accounts/accounts_screen.dart`
-- `test/widget_test.dart`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
 ## Not Changed
 
-- account schema
-- account repository behavior
+- app code
+- database schema
+- account behavior
 - dependencies
 - trades
-- instruments management
-- setup management
+- setups
 - filters
 - dashboard
 - performance calculations
 - export/import
 
 ## Open Questions
+
+None for Slice 2.
 
 Still open for later slices:
 
@@ -37,28 +36,19 @@ Still open for later slices:
 
 ## Verification
 
-Run after approval:
-
-- `flutter pub get` passed
-- `dart format .` passed
-- `flutter analyze` passed with no issues
-- `flutter test` passed
-
-## Review Findings
-
-No remaining findings.
+No verification commands were run because this step changed documentation only.
 
 ## Suggested Commit Message
 
 ```text
-test: verify account screen provider scope
+docs: define instruments slice
 ```
 
 ## Recommended Next Mode
 
-`define_task`
+`execute_task`
 
 ## Reason
 
-Slice 1 is implemented and reviewed. The next slice should be defined before
-more code changes begin.
+The instrument slice has a defined and bounded scope. The next step can
+implement it without resolving additional product questions.

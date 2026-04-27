@@ -2,30 +2,66 @@
 
 ## Mode
 
-`review_task`
+`define_task`
 
 ## Task
 
-Review Slice 1: Foundation + Accounts.
+Define Slice 2: Instruments.
 
-## Review Scope
+## Goal
 
-- verify dependencies
-- format changed Dart files
-- run static analysis
-- run tests
-- review layer boundaries
-- review SQLite account schema
-- confirm no trade, dashboard, filter, performance, or export scope was added
-- confirm every file stays under 300 lines
+Add the documented instrument foundation after Slice 1.
 
-## Review Result
+The slice should make instruments available as real persisted reference data
+without introducing trades, filters, performance, dashboard, setups, or export.
 
-Review completed.
+## Scope
 
-Two issues were found and fixed:
+- add `Instrument` domain model
+- add instrument repository contract
+- add SQLite `instruments` table through a schema migration
+- seed initial instruments `NQ` and `MNQ`
+- add SQLite instrument repository and mapper
+- add Riverpod providers for instruments
+- add a simple German instrument list UI
+- keep existing account behavior unchanged
 
-- replaced deprecated `DropdownButtonFormField.value` with `initialValue`
-- wrapped the widget test in `ProviderScope`
+## Out Of Scope
 
-No remaining review findings are known.
+- trade creation
+- setup selection
+- filters
+- performance calculations
+- dashboard changes
+- import/export
+- instrument edit or delete workflows unless explicitly approved later
+- unmanaged free-text instruments
+
+## Acceptance Criteria
+
+- `instruments` table uses UUID `TEXT` IDs
+- stored fields match `docs/database_model_v1.md`
+- seed data contains `NQ` and `MNQ`
+- seeding is idempotent
+- UI text is German
+- code and database names are English
+- no SQL appears in UI
+- no business logic appears in UI
+- no file exceeds 300 lines
+- existing account slice remains functional
+
+## Verification Needed In Execute Task
+
+After implementation, Codex should initiate these commands with explicit
+outside-sandbox approval:
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`
+
+## Open Questions
+
+None for this slice.
+
+Initial setup seeds remain open, but setups are out of scope.
