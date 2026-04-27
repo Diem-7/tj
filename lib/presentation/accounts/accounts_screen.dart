@@ -59,7 +59,9 @@ class _AccountList extends StatelessWidget {
         return Card(
           child: ListTile(
             title: Text(account.name),
-            subtitle: Text('${account.accountType.label} - ${account.currency}'),
+            subtitle: Text(
+              '${account.accountType.label} - ${account.currency}',
+            ),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -119,14 +121,12 @@ class _AccountDialogState extends ConsumerState<_AccountDialog> {
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             DropdownButtonFormField<AccountType>(
-              value: _accountType,
+              initialValue: _accountType,
               decoration: const InputDecoration(labelText: 'Kontotyp'),
               items: AccountType.values
                   .map(
-                    (type) => DropdownMenuItem(
-                      value: type,
-                      child: Text(type.label),
-                    ),
+                    (type) =>
+                        DropdownMenuItem(value: type, child: Text(type.label)),
                   )
                   .toList(),
               onChanged: (value) {
@@ -164,10 +164,7 @@ class _AccountDialogState extends ConsumerState<_AccountDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Abbrechen'),
         ),
-        FilledButton(
-          onPressed: _save,
-          child: const Text('Speichern'),
-        ),
+        FilledButton(onPressed: _save, child: const Text('Speichern')),
       ],
     );
   }

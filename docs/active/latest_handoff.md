@@ -2,35 +2,23 @@
 
 ## Summary
 
-The project CLI rules were updated. Codex must now initiate verification
-commands itself after `execute_task`, request approval for execution outside the
-sandbox, and run them after approval.
+Slice 1 was reviewed. Verification commands were initiated by Codex with
+outside-sandbox approval. Two review fixes were applied: one deprecated Flutter
+API was replaced, and the widget test was wrapped in `ProviderScope`.
 
 ## Files Changed
 
-- `pubspec.yaml`
-- `pubspec.lock`
-- `lib/main.dart`
-- `lib/data/database/app_database.dart`
-- `lib/data/accounts/account_mapper.dart`
-- `lib/data/accounts/sqlite_account_repository.dart`
-- `lib/domain/accounts/account.dart`
-- `lib/domain/accounts/account_input.dart`
-- `lib/domain/accounts/account_repository.dart`
-- `lib/presentation/accounts/account_providers.dart`
-- `lib/presentation/accounts/account_type_label.dart`
 - `lib/presentation/accounts/accounts_screen.dart`
 - `test/widget_test.dart`
-- `docs/open_questions.md`
-- `AGENTS.md`
-- `docs/workflow.md`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
 ## Not Changed
 
-- app implementation from Slice 1
+- account schema
+- account repository behavior
+- dependencies
 - trades
 - instruments management
 - setup management
@@ -49,27 +37,28 @@ Still open for later slices:
 
 ## Verification
 
-No verification command was run in this documentation update.
+Run after approval:
 
-Recommended commands:
+- `flutter pub get` passed
+- `dart format .` passed
+- `flutter analyze` passed with no issues
+- `flutter test` passed
 
-- `flutter pub get`
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+## Review Findings
+
+No remaining findings.
 
 ## Suggested Commit Message
 
 ```text
-docs: clarify cli verification approval flow
+test: verify account screen provider scope
 ```
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-The Slice 1 implementation and the CLI verification rules are ready for review.
-Verification commands should now be initiated by Codex with outside-sandbox
-approval.
+Slice 1 is implemented and reviewed. The next slice should be defined before
+more code changes begin.

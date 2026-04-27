@@ -1,29 +1,30 @@
 # Next Step
 
-## Required Review
-
-Review the Slice 1 implementation.
-
-Recommended local verification commands, if approved:
-
-- `flutter pub get` to resolve the new dependencies
-- `dart format` to format changed Dart files
-- `flutter analyze` to check static issues
-- `flutter test` to run the widget test
-
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-Slice 1 code has been implemented, but dependency resolution and verification
-were not run because those commands require explicit approval.
+Slice 1 has been implemented and reviewed. The next slice needs a defined and
+accepted scope before new implementation starts.
 
-## Review Focus
+## Suggested Next Slice
 
-- layer boundaries: Data -> Domain -> Presentation
-- SQLite schema matches `docs/database_model_v1.md`
-- no SQL in UI
-- no performance or trade scope added
-- all files stay under 300 lines
+Slice 2: Instruments
+
+Potential scope:
+
+- instrument domain model
+- instrument SQLite table
+- initial `NQ` and `MNQ` seeds
+- instrument repository
+- instrument list UI
+
+## Still Out Of Scope Until Defined
+
+- trades
+- filters
+- performance calculations
+- dashboard
+- export/import
