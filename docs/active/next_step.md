@@ -1,41 +1,40 @@
 # Next Step
 
-## Required Review
+## Required User Approval
 
-Review the documentation files.
+Approve or adjust the proposed Slice 1 decisions:
 
-Clarify before implementation:
-
-- approved `account_type` enum values
-- initial setup seeds
-- SQLite package choice
-- account editing fields
-- exact UI color tokens
+- `account_type` values: `combine`, `express_funded`, `live`
+- SQLite package: `sqflite`
+- editable account fields: `name`, `account_type`, `currency`,
+  `initial_balance`, `is_active`
 
 ## Recommended Next Mode
 
-`define_task`
+`execute_task`
 
 ## Reason
 
-The next implementation slice needs exact approval before code changes.
-The open questions affect the account and database foundation.
+The task is now scoped to foundation plus accounts only. Execution can start
+after the account and database choices are accepted.
 
-## Proposed Slice After Approval
+## Execute Scope After Approval
 
-Slice 1: Foundation + Accounts
+Implement Slice 1:
 
-Included:
+- create required layer folders
+- add SQLite dependency and foundation
+- add account domain model and validation rules
+- add account repository
+- add account create UI
+- add account list UI using German text
 
-- project structure
-- SQLite foundation
-- `accounts` table with UUID/TEXT IDs
-- account create flow
-- account list as cards
+## Execute Non-Scope
 
-Excluded:
+Do not implement:
 
-- dashboard
 - trades
-- performance KPIs
+- dashboard
+- performance calculations
+- filters
 - export/import

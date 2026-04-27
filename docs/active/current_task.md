@@ -4,32 +4,63 @@
 
 `define_task`
 
-## Scope
+## Task
 
-Initialize project documentation from the final system document.
+Define the next executable slice after documentation foundation.
 
-Approved files:
+## Proposed Next Slice
 
-- `AGENTS.md`
-- `docs/system.md`
-- `docs/architecture.md`
-- `docs/database_model_v1.md`
-- `docs/domain_model_v1.md`
-- `docs/design.md`
-- `docs/workflow.md`
-- `docs/open_questions.md`
-- `docs/active/current_task.md`
-- `docs/active/next_step.md`
-- `docs/active/latest_handoff.md`
+Slice 1: Foundation + Accounts
+
+## Goal
+
+Create the first real app foundation for local account management while staying
+inside the documented product boundary.
+
+The slice must establish:
+
+- `lib/data`
+- `lib/domain`
+- `lib/presentation`
+- SQLite database foundation
+- `accounts` table using UUID `TEXT` IDs
+- domain model for accounts
+- account repository flow
+- account create flow
+- account list shown as cards
 
 ## Explicit Non-Scope
 
-Do not change:
+Do not add:
 
-- Flutter code
-- dependencies
-- database implementation
-- providers
-- UI
+- trades
+- instruments management
+- setup management
+- filters
+- dashboard
+- performance KPIs
+- export/import
+- recommendations or behavior scoring
+- fake performance data
 
-Do not run verification commands.
+## Decisions Needed Before Execute
+
+- approve `account_type` values: `combine`, `express_funded`, `live`
+- approve SQLite package choice
+- approve editable account fields after creation
+
+## Proposed Defaults
+
+- `account_type`: `combine`, `express_funded`, `live`
+- SQLite package: `sqflite`
+- account editing fields: `name`, `account_type`, `currency`, `initial_balance`,
+  `is_active`
+
+## Verification Commands For Execute Step
+
+Do not run until approved:
+
+- `flutter pub get` after dependency changes
+- `dart format` after Dart file changes
+- `flutter analyze` after implementation
+- `flutter test` after implementation
