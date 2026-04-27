@@ -2,31 +2,31 @@
 
 ## Mode
 
-`define_task`
+`execute_task`
 
 ## Task
 
-Define Slice 2: Instruments.
+Implement Slice 2: Instruments.
 
-## Goal
+## Result
 
-Add the documented instrument foundation after Slice 1.
+Implementation completed.
 
-The slice should make instruments available as real persisted reference data
-without introducing trades, filters, performance, dashboard, setups, or export.
+## Completed Scope
 
-## Scope
+- added `Instrument` domain model
+- added instrument repository contract
+- added SQLite `instruments` table in database version 2
+- added migration from database version 1 to version 2
+- seeded initial instruments `NQ` and `MNQ`
+- added SQLite instrument mapper and repository
+- added Riverpod providers for instruments
+- added simple German instrument list UI
+- added bottom navigation for accounts and instruments
+- added database test for instrument seeds
+- updated widget test for the new navigation
 
-- add `Instrument` domain model
-- add instrument repository contract
-- add SQLite `instruments` table through a schema migration
-- seed initial instruments `NQ` and `MNQ`
-- add SQLite instrument repository and mapper
-- add Riverpod providers for instruments
-- add a simple German instrument list UI
-- keep existing account behavior unchanged
-
-## Out Of Scope
+## Out Of Scope Kept
 
 - trade creation
 - setup selection
@@ -34,34 +34,24 @@ without introducing trades, filters, performance, dashboard, setups, or export.
 - performance calculations
 - dashboard changes
 - import/export
-- instrument edit or delete workflows unless explicitly approved later
-- unmanaged free-text instruments
+- instrument edit or delete workflows
+- free-text instrument creation
 
-## Acceptance Criteria
+## Verification
 
-- `instruments` table uses UUID `TEXT` IDs
-- stored fields match `docs/database_model_v1.md`
-- seed data contains `NQ` and `MNQ`
-- seeding is idempotent
-- UI text is German
-- code and database names are English
-- no SQL appears in UI
-- no business logic appears in UI
-- no file exceeds 300 lines
-- existing account slice remains functional
+Run after outside-sandbox approval:
 
-## Verification Needed In Execute Task
-
-After implementation, Codex should initiate these commands with explicit
-outside-sandbox approval:
-
-- `flutter pub get`
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+- `flutter pub get` passed
+- `dart format .` passed
+- `flutter analyze` passed with no issues
+- `flutter test` passed
 
 ## Open Questions
 
-None for this slice.
+None for Slice 2.
 
-Initial setup seeds remain open, but setups are out of scope.
+Still open for later slices:
+
+- initial setup seeds
+- exact UI color tokens
+- import merge conflict handling

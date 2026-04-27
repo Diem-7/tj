@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'presentation/accounts/accounts_screen.dart';
+import 'presentation/app_home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,7 @@ class TradingJournalApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xff08111f),
         useMaterial3: true,
       ),
-      home: const AccountsScreen(),
+      home: const AppHome(),
     );
   }
 }

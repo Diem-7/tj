@@ -2,24 +2,28 @@
 
 ## Recommended Next Mode
 
-`execute_task`
+`review_task`
 
 ## Reason
 
-Slice 2 is now defined. Implementation can start once this scope is accepted.
+Slice 2 has been implemented and verified. A review should check boundaries,
+migration behavior, seed correctness, UI scope, and file sizes before moving to
+the next slice.
 
-## Implementation Target
+## Review Target
 
 Slice 2: Instruments
 
-Implement only the instrument foundation:
+Review:
 
-- domain model
-- repository contract
-- SQLite migration and seeds
-- data mapper and repository
-- Riverpod providers
-- simple German list UI
+- database version 2 migration
+- `instruments` table shape
+- idempotent `NQ` and `MNQ` seeds
+- data/domain/presentation boundaries
+- Riverpod provider wiring
+- simple German instrument UI
+- test coverage
+- file size rule
 
 ## Still Out Of Scope
 

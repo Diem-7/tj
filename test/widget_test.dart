@@ -7,6 +7,7 @@ void main() {
   testWidgets('shows accounts screen', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: TradingJournalApp()));
 
-    expect(find.text('Konten'), findsOneWidget);
+    expect(find.text('Konten'), findsWidgets);
+    expect(find.text('Instrumente'), findsOneWidget);
   });
 }
