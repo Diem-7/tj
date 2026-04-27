@@ -2,15 +2,15 @@
 
 ## Account Type Values
 
-The database requires `account_type`.
+Resolved for Slice 1.
 
-Possible values from the system examples:
+Approved values:
 
 - `combine`
 - `express_funded`
 - `live`
-
-Needs confirmation before implementing accounts.
+- `demo`
+- `other`
 
 ## Initial Setup Seeds
 
@@ -37,20 +37,24 @@ Exact colors are not approved yet.
 ## SQLite Package Choice
 
 SQLite is required.
-The exact Flutter package is not approved yet.
 
-Needs confirmation before adding dependencies.
+Resolved for Slice 1:
+
+- `sqflite_common_ffi`
 
 ## Account Editing Fields
 
 Accounts can be edited.
-It is not defined which fields are editable after creation.
 
-Fields needing decision:
+Resolved for Slice 1.
 
+Approved editable fields:
+
+- `name`
 - `account_type`
 - `currency`
 - `initial_balance`
+- `is_active`
 
 ## Import Merge Conflicts
 

@@ -99,8 +99,26 @@ Commands may be needed:
 - `flutter build`
 - `dart run`
 
-Codex must not run these commands without explicit user approval.
-When verification is needed, Codex names the command and explains why.
+Codex must initiate verification commands itself, but only with explicit
+approval for execution outside the sandbox.
+
+Codex must:
+
+- start the command itself
+- request approval for execution outside the sandbox
+- wait for approval
+- run the command after approval
+- not silently skip verification commands
+- not ask the user to run the command manually
+
+After `execute_task`, Codex should automatically run:
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`
+
+These commands must run outside the sandbox after approval.
 
 ## Stop Rules
 

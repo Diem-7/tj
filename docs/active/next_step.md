@@ -1,40 +1,29 @@
 # Next Step
 
-## Required User Approval
+## Required Review
 
-Approve or adjust the proposed Slice 1 decisions:
+Review the Slice 1 implementation.
 
-- `account_type` values: `combine`, `express_funded`, `live`
-- SQLite package: `sqflite`
-- editable account fields: `name`, `account_type`, `currency`,
-  `initial_balance`, `is_active`
+Recommended local verification commands, if approved:
+
+- `flutter pub get` to resolve the new dependencies
+- `dart format` to format changed Dart files
+- `flutter analyze` to check static issues
+- `flutter test` to run the widget test
 
 ## Recommended Next Mode
 
-`execute_task`
+`review_task`
 
 ## Reason
 
-The task is now scoped to foundation plus accounts only. Execution can start
-after the account and database choices are accepted.
+Slice 1 code has been implemented, but dependency resolution and verification
+were not run because those commands require explicit approval.
 
-## Execute Scope After Approval
+## Review Focus
 
-Implement Slice 1:
-
-- create required layer folders
-- add SQLite dependency and foundation
-- add account domain model and validation rules
-- add account repository
-- add account create UI
-- add account list UI using German text
-
-## Execute Non-Scope
-
-Do not implement:
-
-- trades
-- dashboard
-- performance calculations
-- filters
-- export/import
+- layer boundaries: Data -> Domain -> Presentation
+- SQLite schema matches `docs/database_model_v1.md`
+- no SQL in UI
+- no performance or trade scope added
+- all files stay under 300 lines

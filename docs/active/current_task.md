@@ -2,32 +2,39 @@
 
 ## Mode
 
-`define_task`
+`execute_task`
 
 ## Task
 
-Define the next executable slice after documentation foundation.
+Implement Slice 1: Foundation + Accounts.
 
-## Proposed Next Slice
+## Approved Scope
 
-Slice 1: Foundation + Accounts
+- create `lib/data`
+- create `lib/domain`
+- create `lib/presentation`
+- add SQLite database foundation
+- use `sqflite_common_ffi`
+- create the `accounts` table with UUID `TEXT` IDs
+- support `account_type` values:
+  - `combine`
+  - `express_funded`
+  - `live`
+  - `demo`
+  - `other`
+- add account domain model and validation
+- add account repository flow
+- add account create flow
+- add account list as cards
+- use German UI text
 
-## Goal
+## Approved Editable Account Fields
 
-Create the first real app foundation for local account management while staying
-inside the documented product boundary.
-
-The slice must establish:
-
-- `lib/data`
-- `lib/domain`
-- `lib/presentation`
-- SQLite database foundation
-- `accounts` table using UUID `TEXT` IDs
-- domain model for accounts
-- account repository flow
-- account create flow
-- account list shown as cards
+- `name`
+- `account_type`
+- `currency`
+- `initial_balance`
+- `is_active`
 
 ## Explicit Non-Scope
 
@@ -43,24 +50,11 @@ Do not add:
 - recommendations or behavior scoring
 - fake performance data
 
-## Decisions Needed Before Execute
+## Verification Commands
 
-- approve `account_type` values: `combine`, `express_funded`, `live`
-- approve SQLite package choice
-- approve editable account fields after creation
+Not run in this step because CLI rules require explicit command approval:
 
-## Proposed Defaults
-
-- `account_type`: `combine`, `express_funded`, `live`
-- SQLite package: `sqflite`
-- account editing fields: `name`, `account_type`, `currency`, `initial_balance`,
-  `is_active`
-
-## Verification Commands For Execute Step
-
-Do not run until approved:
-
-- `flutter pub get` after dependency changes
-- `dart format` after Dart file changes
-- `flutter analyze` after implementation
-- `flutter test` after implementation
+- `flutter pub get`
+- `dart format`
+- `flutter analyze`
+- `flutter test`

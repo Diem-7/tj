@@ -100,3 +100,35 @@ Relevant commands:
 - `flutter pub get`
 - `flutter build`
 - `dart run`
+
+## Ausführung von CLI-Befehlen
+
+Codex soll Verifikationsbefehle selbst ausführen, jedoch nur mit expliziter
+Freigabe außerhalb der Sandbox.
+
+Dazu gehören:
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`
+- `flutter build`
+- `dart run`
+
+Regel:
+
+- Codex soll den Befehl selbst initiieren.
+- Codex muss eine Ausführung außerhalb der Sandbox anfragen.
+- Codex darf den Befehl nicht still überspringen.
+- Codex darf den Nutzer nicht bitten, den Befehl manuell auszuführen.
+
+Verhalten:
+
+Codex schreibt zum Beispiel:
+
+```text
+Ich führe jetzt flutter analyze aus. Bitte Freigabe für Ausführung außerhalb
+der Sandbox.
+```
+
+Dann wartet Codex auf Bestätigung und führt den Befehl aus.
