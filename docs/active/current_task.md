@@ -6,12 +6,13 @@
 
 ## Task
 
-Review Slice 8b: JSON export foundation.
+Review Slice 8c: JSON export file-save UI.
 
 ## Goal
 
-Review the read-only JSON export foundation against the binding documents before
-import, file save UI, setup workflow, or dashboard work starts.
+Review the dashboard export action, Riverpod wiring, `file_selector`
+dependency, generated plugin registrants, and handoff documentation before
+starting import, setup workflow, or dashboard expansion.
 
 ## Review Result
 
@@ -19,39 +20,44 @@ No findings.
 
 ## Reason
 
-The export foundation should preserve journal data in the documented JSON shape
-without creating duplicate performance truth, import write behavior, or UI-layer
-business logic.
+The implementation exposes the existing export foundation through presentation
+code without adding SQL to UI, performance shortcuts, import behavior, merge
+behavior, or trading recommendations.
 
 ## Reviewed Scope
 
-- `lib/domain/export/journal_export.dart`
-- `lib/domain/export/journal_export_service.dart`
-- `test/journal_export_service_test.dart`
+- `pubspec.yaml`
+- `pubspec.lock`
+- generated desktop plugin registrants
+- `lib/presentation/export/export_providers.dart`
+- `lib/presentation/export/export_action.dart`
+- `lib/presentation/dashboard/dashboard_screen.dart`
 - active handoff documentation
 
 ## Acceptance Notes
 
-- Export JSON has the required top-level keys: `schemaVersion`, `exportedAt`,
-  `app`, and `data`.
-- Export data includes `accounts`, `instruments`, `setups`, and `trades`.
-- Export generation reads through repository interfaces.
+- Export action is reachable from the dashboard app bar.
+- Export generation uses `JournalExportService`.
+- `JournalExportService` is wired through repository providers.
+- Export JSON shape remains owned by `JournalExport.toJson()`.
+- Formatted JSON is saved through `file_selector`.
+- UI feedback text is German.
 - No SQL was added to UI files.
-- No export business logic was added to UI files.
-- No import write behavior was added.
-- No replace or merge behavior was added.
-- No performance KPI is stored or exported as stored truth.
-- `r_multiple` is not exported.
-- `net_pnl` remains the central performance value on trades.
-- Code and JSON keys remain English.
-- All touched files stay under 300 lines.
+- No performance calculation was added to UI files.
+- No import, replace, merge, or conflict handling was added.
+- No stored performance KPIs were added.
+- `r_multiple` is not exported by the export model.
+- Desktop plugin registrants match the added `file_selector` package.
 
 ## Not Changed
 
 - database schema
 - existing repositories
-- UI screens
-- dashboard
+- existing export model shape
+- account behavior
+- instrument behavior
+- trade behavior
+- dashboard performance behavior
 - performance formulas
 - stored performance KPIs
 - setup seeds
@@ -66,12 +72,15 @@ business logic.
 
 - Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
-- Setup selection behavior remains out of scope until setup seed or empty setup
-  behavior is approved.
 - Exact UI color tokens are still unapproved.
 
 ## Verification
 
+Not rerun during review.
+
+Previously documented for Slice 8c:
+
+- `flutter pub get` passed
 - `dart format .` passed, 1 file changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed

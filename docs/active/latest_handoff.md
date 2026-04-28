@@ -2,9 +2,10 @@
 
 ## Summary
 
-Slice 8b JSON export foundation was reviewed. The read-only export model,
-service, focused test, and active handoff documentation match the current task
-and binding documents. No review findings were found.
+Slice 8c JSON export file-save UI was reviewed. The dashboard export action,
+Riverpod wiring, `file_selector` dependency, generated desktop plugin
+registrants, and handoff documentation match the scoped task and binding
+documents. No review findings were found.
 
 ## Files Changed
 
@@ -14,17 +15,25 @@ and binding documents. No review findings were found.
 
 ## Code Reviewed
 
-- `lib/domain/export/journal_export.dart`
-- `lib/domain/export/journal_export_service.dart`
-- `test/journal_export_service_test.dart`
+- `pubspec.yaml`
+- `pubspec.lock`
+- `lib/presentation/export/export_providers.dart`
+- `lib/presentation/export/export_action.dart`
+- `lib/presentation/dashboard/dashboard_screen.dart`
+- generated desktop plugin registrants
 
-## Not Changed
+## Not Changed During Review
 
-- app code during review
-- database schema during review
-- existing repositories during review
-- UI screens
-- dashboard
+- app code
+- dependency files
+- generated plugin registrants
+- database schema
+- existing repositories
+- existing export model shape
+- account behavior
+- instrument behavior
+- trade behavior
+- dashboard performance behavior
 - performance formulas
 - stored performance KPIs
 - setup seeds
@@ -39,12 +48,15 @@ and binding documents. No review findings were found.
 
 - Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
-- Setup selection behavior remains out of scope until setup seed or empty setup
-  behavior is approved.
 - Exact UI color tokens are still unapproved.
 
 ## Verification
 
+Not rerun during review.
+
+Previously documented for Slice 8c:
+
+- `flutter pub get` passed
 - `dart format .` passed, 1 file changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
@@ -56,7 +68,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add json export foundation
+feat: add json export file save ui
 ```
 
 ## Recommended Next Mode
@@ -65,6 +77,5 @@ feat: add json export foundation
 
 ## Reason
 
-Slice 8b is complete and reviewed. The next implementation slice should be
-defined before import, file save UI, setup workflow, or dashboard expansion is
-added.
+Slice 8c is complete and reviewed. The next implementation area needs explicit
+scope definition before import, setup workflow, or dashboard expansion starts.

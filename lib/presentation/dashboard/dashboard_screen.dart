@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/performance/performance_summary.dart';
 import '../../domain/trades/trade.dart';
+import '../export/export_action.dart';
 import '../trades/trade_labels.dart';
 import '../trades/trade_providers.dart';
 
@@ -17,6 +18,7 @@ class DashboardScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
+          const ExportAction(),
           IconButton(
             tooltip: 'Aktualisieren',
             onPressed: () => ref.invalidate(performanceSummaryProvider),

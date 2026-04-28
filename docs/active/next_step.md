@@ -6,16 +6,18 @@
 
 ## Reason
 
-Slice 8b is implemented, verified, and reviewed with no findings. The next
-slice needs exact scope definition before import, file save UI, setup workflow,
-or additional dashboard work begins.
+Slice 8c is implemented and reviewed with no findings. The next slice should be
+defined before import, setup workflow, dashboard expansion, or export/import
+conflict behavior is changed.
 
 ## Suggested Next Definition Scope
 
-- decide whether the next slice is export file save UI, JSON import definition,
-  setup seed definition, setup selection, or dashboard expansion
-- define import merge or replace behavior before implementing JSON import
-- keep setup filtering out of scope until setup seed behavior is approved
+- decide whether the next slice is JSON import definition, setup seed
+  definition, setup selection, setup management, or dashboard expansion
+- define import replace, merge, and conflict behavior before implementing JSON
+  import
+- keep setup selection and setup filtering out of scope until setup seed or
+  empty setup behavior is approved
 - keep dashboard expansion out of scope unless the next slice explicitly targets
   it
 
@@ -24,7 +26,6 @@ or additional dashboard work begins.
 - JSON import
 - replace or merge behavior
 - import conflict handling
-- file picker or filesystem save UI
 - setup selection in trade forms
 - setup filtering
 - setup create/edit/delete UI
@@ -36,8 +37,9 @@ or additional dashboard work begins.
 - session breakdowns
 - recommendations, judging, optimization, or automation
 
-## Verification Already Run For Slice 8b
+## Verification Already Run For Slice 8c
 
+- `flutter pub get` passed
 - `dart format .` passed, 1 file changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
