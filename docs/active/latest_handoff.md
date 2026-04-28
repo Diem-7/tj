@@ -2,52 +2,48 @@
 
 ## Summary
 
-Slice 9a JSON import behavior contract was reviewed. The binding documentation
-matches the approved rules: local record wins for merge conflicts, imported
-matching UUID records are skipped, replace is one transaction with rollback, and
-invalid files or invalid rows reject the whole import in v1. No review findings
-were found.
+The Slice 9b UUID validation fix was reviewed with no findings. The JSON import
+parser now rejects invalid UUID values for imported entity IDs and trade
+reference IDs before returning typed import data.
 
 ## Files Changed
 
-- `docs/system.md`
-- `docs/open_questions.md`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
 ## Code Reviewed
 
-No app code was reviewed or changed in this slice.
+- `lib/domain/import/journal_import_parser.dart`
+- `test/journal_import_parser_test.dart`
 
-## Documentation Reviewed
+## Review Findings
 
-- `docs/system.md`
-- `docs/open_questions.md`
-- active handoff documentation
+No findings.
 
 ## Review Notes
 
-- JSON import accepts only `schemaVersion` 1.
-- Invalid files reject the whole import before writing anything.
-- Invalid rows reject the whole import in v1.
-- Import never runs automatically.
-- User must consciously confirm replace or merge.
-- Replace clears all v1 tables, inserts import data, and commits as one
-  transaction.
-- Replace errors roll back the full transaction.
-- Merge inserts only records whose UUID does not already exist locally.
-- Matching UUID conflicts keep local data and skip the imported record.
-- Import result reporting includes `mode`, `accountsImported`,
-  `instrumentsImported`, `setupsImported`, `tradesImported`, and
-  `skippedConflicts`.
-- Git status shows only documentation files changed.
+- Account, instrument, setup, and trade `id` values must be UUID strings.
+- Trade `account_id` and `instrument_id` must be UUID strings.
+- Optional trade `setup_id` may be null, but must be a UUID string when set.
+- Invalid UUID values reject the whole import through `JournalImportException`.
+- Parser remains non-mutating.
+- Parser remains in the domain layer.
+- Parser does not reference SQLite, repositories, Riverpod, or UI.
+- The invalid UUID case is covered by a focused parser test.
+- No file exceeds 300 lines.
+- `journal_import_parser.dart` is close to the file size limit and should not
+  absorb large future import execution logic.
 
-## Not Changed During Review
+## What Did Not Change During Review
 
 - app code
-- database schema
+- SQLite schema
 - repositories
+- Riverpod providers
+- import UI
+- database replace or merge behavior
+- transaction implementation
 - export model shape
 - dashboard behavior
 - performance formulas
@@ -56,26 +52,29 @@ No app code was reviewed or changed in this slice.
 - setup selection
 - setup filtering
 - setup management UI
-- JSON import implementation
 - recommendations, judging, optimization, or automation
 
-## Open Questions
+## Non-Blocking Open Questions
 
-- Initial setup seeds are still undefined.
-- Exact UI color tokens are still unapproved.
+- Initial setup seeds are still undefined, but not relevant for the import
+  parser slice.
+- Exact UI color tokens are still unapproved, but not relevant for the import
+  parser slice.
 
 ## Verification
 
-No verification command was run. This review step covered documentation only.
+No verification command was run during review. The UUID fix verification was
+already run during execute:
 
-## Review Findings
-
-No findings.
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`
 
 ## Suggested Commit Message
 
 ```text
-docs: define json import rules
+fix: validate import ids as uuids
 ```
 
 ## Recommended Next Mode
@@ -84,5 +83,6 @@ docs: define json import rules
 
 ## Reason
 
-Slice 9a is complete and reviewed. The next implementation slice needs exact
-scope definition before JSON import code starts.
+Slice 9b and its UUID validation fix are reviewed with no findings. The next
+import implementation slice needs exact scope definition before database
+replace, merge, transaction, provider, or UI work begins.

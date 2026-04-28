@@ -6,61 +6,45 @@
 
 ## Task
 
-Review Slice 9a: JSON import behavior contract.
+Review Slice 9b UUID validation fix.
 
 ## Goal
 
-Review the documented JSON import rules before implementation starts.
+Review the UUID validation fix before any database replace, merge, transaction,
+provider, or UI import work starts.
 
 ## Review Result
 
 No findings.
 
-## Reason
-
-The binding documentation matches the approved import decisions: local record
-wins for merge conflicts, replace is transactional, invalid files and invalid
-rows reject the whole import, only `schemaVersion` 1 is accepted, and import
-requires conscious user confirmation.
-
 ## Reviewed Scope
 
-- `docs/system.md`
-- `docs/open_questions.md`
-- `docs/active/current_task.md`
-- `docs/active/next_step.md`
-- `docs/active/latest_handoff.md`
+- `lib/domain/import/journal_import_parser.dart`
+- `test/journal_import_parser_test.dart`
+- active handoff documentation
 
 ## Review Notes
 
-- `docs/system.md` describes replace and merge behavior clearly.
-- `docs/open_questions.md` no longer lists import merge conflicts as unresolved.
-- Import behavior respects `no automatic overwrite`.
-- Matching UUID conflict behavior is explicit.
-- Invalid file and invalid row behavior is explicit.
-- No SQL, repository, Riverpod, or UI implementation was added.
-- No setup seed, setup selection, dashboard, or KPI behavior was changed.
-- Git status shows only documentation files changed.
+- Imported entity IDs are validated as UUID strings.
+- Trade `account_id` and `instrument_id` are validated as UUID strings.
+- Optional trade `setup_id` may be null, but must be a UUID string when set.
+- Invalid UUID values reject the import through `JournalImportException`.
+- Parser remains non-mutating.
+- Parser remains in the domain layer.
+- Parser does not reference SQLite, repositories, Riverpod, or UI.
+- The invalid UUID case is covered by a focused parser test.
+- No file exceeds 300 lines.
+- `journal_import_parser.dart` is close to the file size limit and should not
+  absorb large future import execution logic.
 
-## Final Import Rules
+## What Did Not Change
 
-- UUID conflict during merge: local record wins.
-- Merge conflict rows: imported record is skipped.
-- Replace: all v1 tables are cleared and reloaded in one transaction.
-- Replace failure: rollback, no partial changes.
-- Invalid file: reject whole file.
-- Invalid row: reject whole file in v1.
-- Schema version: only `schemaVersion` 1 is accepted.
-- Import result reports `mode`, `accountsImported`, `instrumentsImported`,
-  `setupsImported`, `tradesImported`, and `skippedConflicts`.
-- Import never runs automatically.
-- User must consciously confirm replace or merge.
-
-## Not Changed
-
-- app code
-- database schema
+- SQLite schema
 - repositories
+- Riverpod providers
+- import UI
+- database replace or merge behavior
+- transaction implementation
 - export model shape
 - dashboard behavior
 - performance formulas
@@ -69,14 +53,21 @@ requires conscious user confirmation.
 - setup selection
 - setup filtering
 - setup management UI
-- JSON import implementation
 - recommendations, judging, optimization, or automation
 
-## Open Questions
+## Non-Blocking Open Questions
 
-- Initial setup seeds are still undefined.
-- Exact UI color tokens are still unapproved.
+- Initial setup seeds are still undefined, but not relevant for the import
+  parser slice.
+- Exact UI color tokens are still unapproved, but not relevant for the import
+  parser slice.
 
 ## Verification
 
-No verification command was run. This review step covered documentation only.
+No verification command was run during review. The UUID fix verification was
+already run during execute:
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`

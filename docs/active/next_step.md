@@ -6,33 +6,35 @@
 
 ## Reason
 
-Slice 9a is documented and reviewed with no findings. The next slice should be
-defined before JSON import implementation begins.
+Slice 9b and its UUID validation fix are reviewed with no findings. The next
+import implementation slice should be defined before database replace, merge,
+transaction, provider, or UI work begins.
 
 ## Suggested Next Definition Scope
 
-- define the first JSON import implementation slice
-- keep the slice small, likely import domain parsing and validation first
-- align implementation with the approved import contract in `docs/system.md`
-- avoid file picker UI until import validation and result contracts exist
-- keep setup workflow and dashboard expansion out of scope
+- define the next JSON import implementation slice
+- likely define non-UI import execution contracts for replace or merge
+- keep database mutation scope explicit and transactional
+- keep file picker UI out of scope until import execution contracts are stable
+- avoid adding large logic to `journal_import_parser.dart`, which is close to
+  the file size limit
 
 ## Do Not Implement Yet
 
 - file picker import UI
-- database replace or merge code
-- automatic overwrite
+- Riverpod import providers
+- dashboard charts
 - setup selection in trade forms
 - setup filtering
 - setup create/edit/delete UI
 - predefined setup seed names
-- dashboard charts
-- equity curve
-- account equity calculation
-- time-period grouping
-- session breakdowns
 - recommendations, judging, optimization, or automation
 
-## Verification Already Run For Slice 9a
+## Verification Already Run
 
-No verification command was run because Slice 9a changed only documentation.
+For the UUID validation fix:
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`
