@@ -25,6 +25,22 @@ void main() {
     expect(executor.lastData?.accounts.single.name, 'Combine');
   });
 
+  test('parses json text for preview before executing import', () {
+    final executor = _FakeImportExecutor();
+    final action = ImportAction(
+      parser: const JournalImportParser(),
+      executor: executor,
+    );
+
+    final data = action.parseJsonText(jsonEncode(_validImport()));
+
+    expect(data.accounts.length, 1);
+    expect(data.instruments.length, 1);
+    expect(data.setups.length, 1);
+    expect(data.trades.length, 1);
+    expect(executor.callCount, 0);
+  });
+
   test('rejects non-object json before executing import', () async {
     final executor = _FakeImportExecutor();
     final action = ImportAction(

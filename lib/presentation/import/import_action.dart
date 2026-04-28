@@ -14,16 +14,19 @@ class ImportAction {
   final JournalImportParser _parser;
   final JournalImportExecutor _executor;
 
-  Future<JournalImportResult> executeJsonText({
-    required String jsonText,
-    required JournalImportMode mode,
-  }) async {
+  JournalImportData parseJsonText(String jsonText) {
     final decoded = jsonDecode(jsonText);
     if (decoded is! Map) {
       throw const JournalImportException('Import file must be a JSON object.');
     }
 
-    final import = _parser.parse(Map<String, Object?>.from(decoded));
-    return _executor.execute(data: import.data, mode: mode);
+    return _parser.parse(Map<String, Object?>.from(decoded)).data;
+  }
+
+  Future<JournalImportResult> executeJsonText({
+    required String jsonText,
+    required JournalImportMode mode,
+  }) async {
+    return _executor.execute(data: parseJsonText(jsonText), mode: mode);
   }
 }

@@ -6,19 +6,17 @@
 
 ## Reason
 
-Slice 9d is implemented, verified, and reviewed with no findings. The next
-import slice should be defined before UI work begins so file picking,
-confirmation, and mutation timing stay explicit.
+Slice 9e is implemented, verified, and reviewed with no findings. The next
+slice should be defined before adding more import workflow, dashboard, or setup
+work.
 
 ## Suggested Next Definition Scope
 
-- define the next JSON import UI integration slice
-- likely focus on import file picker plus preview/confirmation boundary
-- require explicit user choice between replace and merge before mutation
-- use the existing `importActionProvider`
-- keep parser, executor, and provider contracts stable unless review finds a
-  concrete need
-- keep dashboard, setup, and performance work out of scope
+- decide the next smallest product slice
+- keep dashboard charts, setup selection, setup filtering, and setup management
+  out of scope unless explicitly selected
+- preserve the import rules already implemented and reviewed
+- keep the Data -> Domain -> Presentation layering intact
 
 ## Do Not Implement Yet
 
@@ -31,9 +29,8 @@ confirmation, and mutation timing stay explicit.
 
 ## Verification Already Run
 
-For Slice 9d:
+For Slice 9e:
 
-- `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`

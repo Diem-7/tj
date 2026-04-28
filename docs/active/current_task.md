@@ -6,12 +6,13 @@
 
 ## Task
 
-Review Slice 9d: JSON import provider wiring.
+Review Slice 9e: JSON import UI entry point and explicit confirmation
+boundary.
 
 ## Goal
 
-Review the provider-wiring slice before any file picker UI, confirmation dialog,
-or broader import workflow work starts.
+Review the import UI boundary before further import workflow, dashboard, or
+setup work starts.
 
 ## Review Result
 
@@ -19,40 +20,38 @@ No findings.
 
 ## Reviewed Scope
 
-- `lib/domain/import/journal_import_execution.dart`
-- `lib/data/import/sqlite_journal_import_executor.dart`
 - `lib/presentation/import/import_action.dart`
-- `lib/presentation/import/import_providers.dart`
+- `lib/presentation/import/import_button.dart`
+- `lib/presentation/dashboard/dashboard_screen.dart`
 - `test/import_action_test.dart`
 - active handoff documentation
 
 ## Review Notes
 
-- `JournalImportExecutor` is a small domain contract and does not introduce UI
-  or SQL into the domain layer.
-- `SqliteJournalImportExecutor` remains the data-layer implementation.
-- Import providers only construct dependencies and do not execute imports.
-- `ImportAction.executeJsonText` requires an explicit `JournalImportMode`.
-- JSON parsing and domain import validation happen before executor mutation.
-- Tests cover successful parse-and-execute, non-object JSON rejection, and
-  invalid row rejection before execution.
-- SQL and transaction behavior remain in the data layer.
-- File picker UI and confirmation dialogs remain unimplemented.
+- File selection does not mutate data.
+- `ImportAction.parseJsonText` parses and validates import JSON for preview
+  without calling the executor.
+- The confirmation dialog shows only row counts for accounts, instruments,
+  setups, and trades.
+- Replace and merge are explicit dialog actions.
+- Canceling file selection or the confirmation dialog returns before execution.
+- Import execution still goes through `importActionProvider`.
+- UI code contains no SQL.
+- Provider invalidation covers visible imported data after successful import.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- parser row rules
+- JSON schema
+- parser validation rules
 - replace behavior
 - merge behavior
 - repository contracts
-- file picker UI
-- import confirmation dialogs
-- dashboard behavior
+- dashboard metrics
 - performance formulas
-- stored performance KPIs
+- stored performance KPI rules
 - setup seeds
 - setup selection
 - setup filtering
@@ -61,21 +60,19 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 9d.
+No blocking questions for Slice 9e.
 
 Non-blocking:
 
-- Initial setup seeds are still undefined, but not relevant for the reviewed
-  import provider wiring.
-- Exact UI color tokens are still unapproved, but not relevant for the reviewed
-  import provider wiring.
+- Initial setup seeds are still undefined, but not relevant for import UI.
+- Exact UI color tokens are still unapproved, but this slice follows the
+  existing Material/AppBar action style.
 
 ## Verification
 
-No verification command was run during review. Slice 9d verification was already
+No verification command was run during review. Slice 9e verification was already
 run during execute:
 
-- `flutter pub get` passed
 - `dart format .` passed
 - `flutter analyze` passed with no issues
-- `flutter test` passed, 33 tests
+- `flutter test` passed, 34 tests
