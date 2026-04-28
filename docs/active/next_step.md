@@ -2,34 +2,34 @@
 
 ## Recommended Next Mode
 
-`define_task`
+`review_task`
 
 ## Reason
 
-Slice 2 has been implemented, verified, and reviewed. The next implementation
-slice needs a defined and accepted scope before code changes continue.
+Slice 3 is implemented and verified. A review pass should check architecture,
+data model alignment, UI boundary, and test coverage before defining the next
+slice.
 
-## Suggested Next Slice
+## Review Scope
 
-Slice 3: Trades foundation
+- confirm trade domain rules match `docs/domain_model_v1.md`
+- confirm `trades` schema matches `docs/database_model_v1.md`
+- confirm no `r_multiple` or performance KPI is stored
+- confirm UI contains no SQL and no trade calculations outside domain
+- confirm setup behavior stayed out of scope
+- confirm all files remain under 300 lines
 
-Potential scope:
+## Do Not Implement In Review
 
-- trade domain model
-- trade validation rules
-- trade SQLite table migration
-- trade repository contract
-- simple trade list shell
-
-## Needs Definition Before Implementation
-
-- exact first trade workflow fields
-- whether setup selection waits until setup seeds are defined
-- how trade creation handles optional setup in the first slice
-
-## Still Out Of Scope Until Defined
-
+- setups
 - filters
-- performance calculations
 - dashboard
+- performance KPIs
 - export/import
+
+## Verification Already Run
+
+- `flutter pub get`
+- `dart format .`
+- `flutter analyze`
+- `flutter test`

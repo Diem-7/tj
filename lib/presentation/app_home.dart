@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'accounts/accounts_screen.dart';
 import 'instruments/instruments_screen.dart';
+import 'trades/trades_screen.dart';
 
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
@@ -33,10 +34,15 @@ class _AppHomeState extends State<AppHome> {
             selectedIcon: Icon(Icons.show_chart),
             label: 'Instrumente',
           ),
+          NavigationDestination(
+            icon: Icon(Icons.receipt_long_outlined),
+            selectedIcon: Icon(Icons.receipt_long),
+            label: 'Trades',
+          ),
         ],
       ),
     );
   }
 }
 
-const _screens = [AccountsScreen(), InstrumentsScreen()];
+const _screens = [AccountsScreen(), InstrumentsScreen(), TradesScreen()];

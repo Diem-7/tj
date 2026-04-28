@@ -25,16 +25,20 @@ class AppDatabase {
     final database = await factory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 2,
+        version: 3,
         onCreate: (db, version) async {
           await _createAccountsTable(db);
           await _createInstrumentsTable(db);
+          await _createTradesTable(db);
           await _seedInstruments(db);
         },
         onUpgrade: (db, oldVersion, newVersion) async {
           if (oldVersion < 2) {
             await _createInstrumentsTable(db);
             await _seedInstruments(db);
+          }
+          if (oldVersion < 3) {
+            await _createTradesTable(db);
           }
         },
       ),
@@ -65,6 +69,33 @@ CREATE TABLE instruments (
   symbol TEXT NOT NULL,
   name TEXT,
   is_active INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+)
+''');
+  }
+
+  Future<void> _createTradesTable(Database db) async {
+    await db.execute('''
+CREATE TABLE trades (
+  id TEXT PRIMARY KEY,
+  account_id TEXT NOT NULL,
+  instrument_id TEXT NOT NULL,
+  setup_id TEXT,
+  opened_at TEXT NOT NULL,
+  closed_at TEXT,
+  direction TEXT NOT NULL,
+  entry_price REAL NOT NULL,
+  exit_price REAL,
+  stop_loss_price REAL,
+  take_profit_price REAL,
+  quantity REAL NOT NULL,
+  risk_amount REAL,
+  fees REAL,
+  net_pnl REAL,
+  session TEXT,
+  rating INTEGER,
+  notes TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 )

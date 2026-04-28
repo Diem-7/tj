@@ -16,4 +16,18 @@ void main() {
     expect(rows.every((row) => row['is_active'] == 1), isTrue);
     await db.close();
   });
+
+  test('creates trades table', () async {
+    final database = AppDatabase(
+      factory: databaseFactoryFfi,
+      path: inMemoryDatabasePath,
+    );
+
+    final db = await database.open();
+    final rows = await db.rawQuery('PRAGMA table_info(trades)');
+
+    expect(rows.map((row) => row['name']), contains('net_pnl'));
+    expect(rows.map((row) => row['name']), isNot(contains('r_multiple')));
+    await db.close();
+  });
 }

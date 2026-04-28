@@ -9,5 +9,6 @@ void main() {
 
     expect(find.text('Konten'), findsWidgets);
     expect(find.text('Instrumente'), findsOneWidget);
+    expect(find.text('Trades'), findsOneWidget);
   });
 }
