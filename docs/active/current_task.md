@@ -6,12 +6,12 @@
 
 ## Task
 
-Review Slice 5: Filter foundation.
+Review Slice 6: Performance foundation.
 
 ## Goal
 
-Check the implemented filter foundation against the binding documents before
-the performance slice is defined.
+Check the implemented performance foundation against the binding documents
+before dashboard work is defined.
 
 ## Review Result
 
@@ -19,32 +19,34 @@ No findings.
 
 ## Reviewed Scope
 
-- central `TradeFilter` domain model
-- closed-trade filter rule
-- `closedAt` date filtering
-- account, instrument, and session filter fields
-- Riverpod filter state and filtered trades provider
-- German filter controls on the trades screen
-- focused filter tests
+- central `PerformanceSummary` domain calculation
+- exclusion of open, partial, and missing-`netPnl` trades
+- net PnL, winrate, profit factor, average R, trade count, best trade, and
+  worst trade rules
+- Riverpod performance provider from filtered trades
+- focused performance tests
 - active handoff documentation
 
 ## Acceptance Notes
 
-- Filter logic is centralized in `TradeFilter`.
-- UI widgets only update filter state.
-- SQL remains in the data layer.
-- Open trades are excluded from filtered analysis results.
-- Trades without both `closedAt` and `exitPrice` are excluded.
-- Time filters use `closedAt` only.
-- Account, instrument, and session filters can be unset.
-- Unset filters do not restrict closed trades.
-- No database schema changes were introduced.
+- Performance logic lives in the domain layer.
+- UI and providers do not duplicate KPI formulas.
+- SQL remains in the data layer only.
+- Calculations use filtered closed trades.
+- Open trades do not influence performance.
+- Trades without both `closedAt` and `exitPrice` do not influence performance.
+- Trades with null `netPnl` do not influence performance values.
+- `tradeCount` counts only trades included in performance calculations.
+- `netPnl` is the sum of included trade `netPnl` values.
+- `winrate` is wins divided by included trade count.
+- `profitFactor` is gross profit divided by absolute gross loss.
+- `averageR` averages only non-null R values.
+- `bestTrade` and `worstTrade` are selected by `netPnl`.
 - No performance values are stored.
-- No performance KPIs were introduced.
-- Setup filtering stayed out of scope.
-- UI text is German.
-- Code, database, and enum values remain English.
-- All files stay under 300 lines.
+- No database migration was added.
+- No dashboard UI was added.
+- Code, database, and enum names remain English.
+- All reviewed files stay under 300 lines.
 
 ## Open Questions
 
@@ -54,10 +56,9 @@ No findings.
 
 ## Verification
 
-Verification was already run after implementation:
+Already run after implementation:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed, 0 files changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
-

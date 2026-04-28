@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/trades/sqlite_trade_repository.dart';
+import '../../domain/performance/performance_summary.dart';
 import '../../domain/trades/trade.dart';
 import '../../domain/trades/trade_filter.dart';
 import '../../domain/trades/trade_repository.dart';
@@ -62,4 +63,11 @@ final filteredTradesProvider = FutureProvider<List<Trade>>((ref) async {
   final trades = await ref.watch(tradesProvider.future);
   final filter = ref.watch(tradeFilterProvider);
   return filter.apply(trades);
+});
+
+final performanceSummaryProvider = FutureProvider<PerformanceSummary>((
+  ref,
+) async {
+  final trades = await ref.watch(filteredTradesProvider.future);
+  return PerformanceSummary.fromTrades(trades);
 });

@@ -2,9 +2,9 @@
 
 ## Summary
 
-Slice 5 Filter foundation was reviewed. The central filter model, closed-trade
-rules, `closedAt` time filtering, Riverpod wiring, German filter controls, and
-focused tests match the current task and binding documents. No review findings
+Slice 6 Performance foundation was reviewed. The central domain calculation,
+trade inclusion rules, Riverpod wiring, focused tests, and active handoff
+documentation match the current task and binding documents. No review findings
 were found.
 
 ## Files Changed
@@ -15,20 +15,21 @@ were found.
 
 ## Code Reviewed
 
-- `lib/domain/trades/trade_filter.dart`
-- `lib/presentation/trades/trade_filter_controls.dart`
+- `lib/domain/performance/performance_summary.dart`
 - `lib/presentation/trades/trade_providers.dart`
-- `lib/presentation/trades/trades_screen.dart`
-- `test/trade_filter_test.dart`
+- `test/performance_summary_test.dart`
 
 ## Not Changed
 
 - app code during review
 - database schema
 - SQL queries
-- performance KPI calculations
 - dashboard
+- charts
 - equity curve
+- account equity calculation
+- time-period grouping
+- session breakdowns
 - setup seeds
 - setup selection
 - export/import
@@ -45,7 +46,7 @@ were found.
 Already run after implementation:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed, 0 files changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
 
@@ -56,7 +57,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add trade filter foundation
+feat: add performance foundation
 ```
 
 ## Recommended Next Mode
@@ -65,6 +66,5 @@ feat: add trade filter foundation
 
 ## Reason
 
-Slice 5 is complete and reviewed. The next implementation slice should be
-defined before performance code changes begin.
-
+Slice 6 is complete and reviewed. The dashboard slice should be defined before
+any dashboard code is added.

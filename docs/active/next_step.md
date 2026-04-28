@@ -6,29 +6,34 @@
 
 ## Reason
 
-Slice 5 is implemented, verified, and reviewed with no findings. The next slice
-needs exact scope definition before performance work begins.
+Slice 6 is implemented, verified, and reviewed with no findings. The next slice
+needs exact scope definition before dashboard work begins.
 
 ## Suggested Next Definition Scope
 
-- define Slice 6 Performance
-- decide exact calculated values included in the first performance slice
-- keep performance calculations derived from filtered closed trades only
-- document included and excluded UI behavior before implementation
-- keep dashboard charts and equity curve separate unless explicitly included
+- define Slice 7 Dashboard
+- decide which performance values appear in the first dashboard view
+- decide whether the first dashboard slice includes only KPI cards or also one
+  chart
+- keep all displayed values derived from `performanceSummaryProvider`
+- document included and excluded dashboard UI behavior before implementation
+- keep equity curve separate unless explicitly included
 
 ## Do Not Implement Yet
 
-- dashboard
+- dashboard code
+- charts
 - equity curve
+- account equity calculation
+- time-period grouping
+- session breakdowns
 - setup filter or setup selection
 - export/import
 - recommendations, judging, optimization, or automation
 
-## Verification Already Run For Slice 5
+## Verification Already Run For Slice 6
 
 - `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`
-
