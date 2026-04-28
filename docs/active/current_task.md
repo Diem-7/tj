@@ -6,13 +6,11 @@
 
 ## Task
 
-Review Slice 9e: JSON import UI entry point and explicit confirmation
-boundary.
+Review Slice 10: manual closed trade creation from the Trades screen.
 
 ## Goal
 
-Review the import UI boundary before further import workflow, dashboard, or
-setup work starts.
+Review the manual closed trade creation path before expanding trade workflows.
 
 ## Review Result
 
@@ -20,35 +18,34 @@ No findings.
 
 ## Reviewed Scope
 
-- `lib/presentation/import/import_action.dart`
-- `lib/presentation/import/import_button.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
-- `test/import_action_test.dart`
+- `lib/presentation/trades/trades_screen.dart`
+- `lib/presentation/trades/trade_create_action.dart`
+- `lib/presentation/trades/trade_create_dialog.dart`
+- `lib/presentation/trades/trade_create_parsing.dart`
 - active handoff documentation
 
 ## Review Notes
 
-- File selection does not mutate data.
-- `ImportAction.parseJsonText` parses and validates import JSON for preview
-  without calling the executor.
-- The confirmation dialog shows only row counts for accounts, instruments,
-  setups, and trades.
-- Replace and merge are explicit dialog actions.
-- Canceling file selection or the confirmation dialog returns before execution.
-- Import execution still goes through `importActionProvider`.
+- The Trades screen exposes a manual create action.
+- The create action opens a focused dialog only when active accounts and
+  instruments are available.
+- Saving builds a `TradeInput` and calls `TradeRepository.create` through
+  `tradeRepositoryProvider`.
+- Successful save invalidates trades, filtered trades, and performance summary.
+- Closed trade creation requires closed date/time and exit price.
+- Setup selection, edit, delete, and open trade creation remained out of scope.
 - UI code contains no SQL.
-- Provider invalidation covers visible imported data after successful import.
+- No performance calculations were added to the UI.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- JSON schema
-- parser validation rules
-- replace behavior
-- merge behavior
 - repository contracts
+- domain models
+- import workflow
+- export workflow
 - dashboard metrics
 - performance formulas
 - stored performance KPI rules
@@ -56,21 +53,23 @@ No findings.
 - setup selection
 - setup filtering
 - setup management UI
+- trade edit or delete
+- open trade creation
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 9e.
+No blocking questions for Slice 10.
 
 Non-blocking:
 
-- Initial setup seeds are still undefined, but not relevant for import UI.
-- Exact UI color tokens are still unapproved, but this slice follows the
-  existing Material/AppBar action style.
+- Date/time input is currently text based and can be improved in a later UI
+  ergonomics slice.
+- Setup selection remains excluded until setup seeds and setup UI are defined.
 
 ## Verification
 
-No verification command was run during review. Slice 9e verification was already
+No verification command was run during review. Slice 10 verification was already
 run during execute:
 
 - `dart format .` passed

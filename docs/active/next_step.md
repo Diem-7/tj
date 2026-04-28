@@ -6,30 +6,29 @@
 
 ## Reason
 
-Slice 9e is implemented, verified, and reviewed with no findings. The next
-slice should be defined before adding more import workflow, dashboard, or setup
-work.
+Slice 10 is implemented, verified, and reviewed with no findings. The next
+product slice should be defined explicitly before more trade workflow work
+begins.
 
 ## Suggested Next Definition Scope
 
-- decide the next smallest product slice
-- keep dashboard charts, setup selection, setup filtering, and setup management
-  out of scope unless explicitly selected
-- preserve the import rules already implemented and reviewed
-- keep the Data -> Domain -> Presentation layering intact
+- decide the next smallest trade workflow slice
+- consider manual trade edit, manual trade delete, date/time input ergonomics,
+  or setup selection only if explicitly selected
+- keep dashboard charts, setup management, and import/export changes out of
+  scope unless explicitly selected
+- preserve the Data -> Domain -> Presentation layering
 
 ## Do Not Implement Yet
 
 - dashboard charts
-- setup selection in trade forms
-- setup filtering
 - setup create/edit/delete UI
 - predefined setup seed names
 - recommendations, judging, optimization, or automation
 
 ## Verification Already Run
 
-For Slice 9e:
+For Slice 10:
 
 - `dart format .`
 - `flutter analyze`

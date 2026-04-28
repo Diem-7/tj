@@ -2,10 +2,9 @@
 
 ## Summary
 
-Slice 9e was reviewed with no findings. The dashboard import action opens a
-JSON file picker, validates and previews row counts before mutation, and
-requires an explicit replace or merge choice before calling
-`importActionProvider`.
+Slice 10 was reviewed with no findings. The manual closed trade creation path
+opens from the Trades screen, saves through the existing repository flow, and
+refreshes visible trade and performance providers after a successful save.
 
 ## Files Changed
 
@@ -15,10 +14,10 @@ requires an explicit replace or merge choice before calling
 
 ## Code Reviewed
 
-- `lib/presentation/import/import_action.dart`
-- `lib/presentation/import/import_button.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
-- `test/import_action_test.dart`
+- `lib/presentation/trades/trades_screen.dart`
+- `lib/presentation/trades/trade_create_action.dart`
+- `lib/presentation/trades/trade_create_dialog.dart`
+- `lib/presentation/trades/trade_create_parsing.dart`
 
 ## Review Findings
 
@@ -26,26 +25,23 @@ No findings.
 
 ## Review Notes
 
-- File selection and preview parsing do not mutate data.
-- Invalid JSON or invalid import rows are rejected before replace/merge choices
-  are acted on.
-- Replace and merge require explicit user action in the dialog.
-- Canceling file selection or the dialog returns before import execution.
-- UI code does not contain SQL.
-- Import execution remains routed through `importActionProvider`.
-- Provider invalidation after successful import covers visible accounts,
-  instruments, setups, trades, filtered trades, and performance summary.
+- The create action is available from the Trades screen.
+- Active account and instrument data are required before opening the dialog.
+- The dialog creates `TradeInput` and saves through `TradeRepository.create`.
+- Provider invalidation covers trades, filtered trades, and performance summary.
+- Closed trade creation requires closed date/time and exit price.
+- Setup selection, edit, delete, and open trade creation stayed out of scope.
+- UI code contains no SQL or performance calculations.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- JSON schema
-- parser validation rules
-- replace behavior
-- merge behavior
 - repository contracts
+- domain models
+- import workflow
+- export workflow
 - dashboard metrics
 - performance formulas
 - stored performance KPI rules
@@ -53,21 +49,23 @@ No findings.
 - setup selection
 - setup filtering
 - setup management UI
+- trade edit or delete
+- open trade creation
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 9e.
+No blocking questions for Slice 10.
 
 Non-blocking:
 
-- Initial setup seeds are still undefined, but not relevant for import UI.
-- Exact UI color tokens are still unapproved, but this slice follows the
-  existing Material/AppBar action style.
+- Date/time input is currently text based and can be improved in a later UI
+  ergonomics slice.
+- Setup selection remains excluded until setup seeds and setup UI are defined.
 
 ## Verification
 
-No verification command was run during review. Slice 9e verification was already
+No verification command was run during review. Slice 10 verification was already
 run during execute:
 
 - `dart format .` passed
@@ -77,7 +75,7 @@ run during execute:
 ## Suggested Commit Message
 
 ```text
-feat: add json import confirmation ui
+feat: add manual trade creation
 ```
 
 ## Recommended Next Mode

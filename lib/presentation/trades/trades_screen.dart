@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/trades/trade.dart';
+import 'trade_create_action.dart';
 import 'trade_filter_controls.dart';
 import 'trade_labels.dart';
 import 'trade_providers.dart';
@@ -24,6 +25,7 @@ class TradesScreen extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: const TradeCreateAction(),
       body: Column(
         children: [
           const TradeFilterControls(),
