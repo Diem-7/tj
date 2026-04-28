@@ -59,4 +59,23 @@ Approved editable fields:
 ## Import Merge Conflicts
 
 Import supports replace or merge.
-Conflict handling for matching UUIDs is not defined yet.
+
+Resolved for Slice 9a.
+
+Approved behavior:
+
+- local record wins
+- imported matching UUID is skipped
+- merge never overwrites local records
+- skipped conflicts are reported in the import result
+
+Related approved import rules:
+
+- replace runs as one transaction
+- replace clears all v1 tables, inserts import data, then commits
+- replace rolls back completely on error
+- invalid files reject the whole import
+- invalid rows reject the whole import in v1
+- only `schemaVersion` 1 is accepted
+- import never runs automatically
+- user must consciously confirm replace or merge

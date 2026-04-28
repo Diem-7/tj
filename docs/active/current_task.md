@@ -6,13 +6,11 @@
 
 ## Task
 
-Review Slice 8c: JSON export file-save UI.
+Review Slice 9a: JSON import behavior contract.
 
 ## Goal
 
-Review the dashboard export action, Riverpod wiring, `file_selector`
-dependency, generated plugin registrants, and handoff documentation before
-starting import, setup workflow, or dashboard expansion.
+Review the documented JSON import rules before implementation starts.
 
 ## Review Result
 
@@ -20,67 +18,65 @@ No findings.
 
 ## Reason
 
-The implementation exposes the existing export foundation through presentation
-code without adding SQL to UI, performance shortcuts, import behavior, merge
-behavior, or trading recommendations.
+The binding documentation matches the approved import decisions: local record
+wins for merge conflicts, replace is transactional, invalid files and invalid
+rows reject the whole import, only `schemaVersion` 1 is accepted, and import
+requires conscious user confirmation.
 
 ## Reviewed Scope
 
-- `pubspec.yaml`
-- `pubspec.lock`
-- generated desktop plugin registrants
-- `lib/presentation/export/export_providers.dart`
-- `lib/presentation/export/export_action.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
-- active handoff documentation
+- `docs/system.md`
+- `docs/open_questions.md`
+- `docs/active/current_task.md`
+- `docs/active/next_step.md`
+- `docs/active/latest_handoff.md`
 
-## Acceptance Notes
+## Review Notes
 
-- Export action is reachable from the dashboard app bar.
-- Export generation uses `JournalExportService`.
-- `JournalExportService` is wired through repository providers.
-- Export JSON shape remains owned by `JournalExport.toJson()`.
-- Formatted JSON is saved through `file_selector`.
-- UI feedback text is German.
-- No SQL was added to UI files.
-- No performance calculation was added to UI files.
-- No import, replace, merge, or conflict handling was added.
-- No stored performance KPIs were added.
-- `r_multiple` is not exported by the export model.
-- Desktop plugin registrants match the added `file_selector` package.
+- `docs/system.md` describes replace and merge behavior clearly.
+- `docs/open_questions.md` no longer lists import merge conflicts as unresolved.
+- Import behavior respects `no automatic overwrite`.
+- Matching UUID conflict behavior is explicit.
+- Invalid file and invalid row behavior is explicit.
+- No SQL, repository, Riverpod, or UI implementation was added.
+- No setup seed, setup selection, dashboard, or KPI behavior was changed.
+- Git status shows only documentation files changed.
+
+## Final Import Rules
+
+- UUID conflict during merge: local record wins.
+- Merge conflict rows: imported record is skipped.
+- Replace: all v1 tables are cleared and reloaded in one transaction.
+- Replace failure: rollback, no partial changes.
+- Invalid file: reject whole file.
+- Invalid row: reject whole file in v1.
+- Schema version: only `schemaVersion` 1 is accepted.
+- Import result reports `mode`, `accountsImported`, `instrumentsImported`,
+  `setupsImported`, `tradesImported`, and `skippedConflicts`.
+- Import never runs automatically.
+- User must consciously confirm replace or merge.
 
 ## Not Changed
 
+- app code
 - database schema
-- existing repositories
-- existing export model shape
-- account behavior
-- instrument behavior
-- trade behavior
-- dashboard performance behavior
+- repositories
+- export model shape
+- dashboard behavior
 - performance formulas
 - stored performance KPIs
 - setup seeds
 - setup selection
 - setup filtering
 - setup management UI
-- JSON import
-- import merge or replace behavior
-- trading recommendations, judging, optimization, or automation
+- JSON import implementation
+- recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-- Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
 - Exact UI color tokens are still unapproved.
 
 ## Verification
 
-Not rerun during review.
-
-Previously documented for Slice 8c:
-
-- `flutter pub get` passed
-- `dart format .` passed, 1 file changed
-- `flutter analyze` passed with no issues
-- `flutter test` passed
+No verification command was run. This review step covered documentation only.

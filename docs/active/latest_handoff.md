@@ -2,64 +2,71 @@
 
 ## Summary
 
-Slice 8c JSON export file-save UI was reviewed. The dashboard export action,
-Riverpod wiring, `file_selector` dependency, generated desktop plugin
-registrants, and handoff documentation match the scoped task and binding
-documents. No review findings were found.
+Slice 9a JSON import behavior contract was reviewed. The binding documentation
+matches the approved rules: local record wins for merge conflicts, imported
+matching UUID records are skipped, replace is one transaction with rollback, and
+invalid files or invalid rows reject the whole import in v1. No review findings
+were found.
 
 ## Files Changed
 
+- `docs/system.md`
+- `docs/open_questions.md`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
 ## Code Reviewed
 
-- `pubspec.yaml`
-- `pubspec.lock`
-- `lib/presentation/export/export_providers.dart`
-- `lib/presentation/export/export_action.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
-- generated desktop plugin registrants
+No app code was reviewed or changed in this slice.
+
+## Documentation Reviewed
+
+- `docs/system.md`
+- `docs/open_questions.md`
+- active handoff documentation
+
+## Review Notes
+
+- JSON import accepts only `schemaVersion` 1.
+- Invalid files reject the whole import before writing anything.
+- Invalid rows reject the whole import in v1.
+- Import never runs automatically.
+- User must consciously confirm replace or merge.
+- Replace clears all v1 tables, inserts import data, and commits as one
+  transaction.
+- Replace errors roll back the full transaction.
+- Merge inserts only records whose UUID does not already exist locally.
+- Matching UUID conflicts keep local data and skip the imported record.
+- Import result reporting includes `mode`, `accountsImported`,
+  `instrumentsImported`, `setupsImported`, `tradesImported`, and
+  `skippedConflicts`.
+- Git status shows only documentation files changed.
 
 ## Not Changed During Review
 
 - app code
-- dependency files
-- generated plugin registrants
 - database schema
-- existing repositories
-- existing export model shape
-- account behavior
-- instrument behavior
-- trade behavior
-- dashboard performance behavior
+- repositories
+- export model shape
+- dashboard behavior
 - performance formulas
 - stored performance KPIs
 - setup seeds
 - setup selection
 - setup filtering
 - setup management UI
-- JSON import
-- import merge or replace behavior
-- trading recommendations, judging, optimization, or automation
+- JSON import implementation
+- recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-- Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
 - Exact UI color tokens are still unapproved.
 
 ## Verification
 
-Not rerun during review.
-
-Previously documented for Slice 8c:
-
-- `flutter pub get` passed
-- `dart format .` passed, 1 file changed
-- `flutter analyze` passed with no issues
-- `flutter test` passed
+No verification command was run. This review step covered documentation only.
 
 ## Review Findings
 
@@ -68,7 +75,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add json export file save ui
+docs: define json import rules
 ```
 
 ## Recommended Next Mode
@@ -77,5 +84,5 @@ feat: add json export file save ui
 
 ## Reason
 
-Slice 8c is complete and reviewed. The next implementation area needs explicit
-scope definition before import, setup workflow, or dashboard expansion starts.
+Slice 9a is complete and reviewed. The next implementation slice needs exact
+scope definition before JSON import code starts.

@@ -249,6 +249,38 @@ Rules:
 
 - user chooses replace or merge
 - no automatic overwrite
+- import never runs automatically
+- user must consciously confirm replace or merge before data is changed
+- only `schemaVersion` 1 is accepted
+- unsupported schema versions are rejected before writing anything
+- invalid files are rejected before writing anything
+- invalid rows reject the whole file in v1
+
+Replace rules:
+
+- replace runs as one transaction
+- all v1 tables are cleared first
+- imported accounts, instruments, setups, and trades are inserted after clearing
+- transaction commits only after all import rows were inserted successfully
+- any error rolls back the full transaction
+- no partial replace is allowed
+
+Merge rules:
+
+- merge inserts only records whose UUID does not already exist locally
+- matching UUID conflicts keep the local record
+- imported records with matching UUID conflicts are skipped
+- merge never overwrites local records
+- skipped conflicts are included in the import result
+
+Import result:
+
+- `mode`: `replace` or `merge`
+- `accountsImported`
+- `instrumentsImported`
+- `setupsImported`
+- `tradesImported`
+- `skippedConflicts`
 
 ## Git Rules
 
