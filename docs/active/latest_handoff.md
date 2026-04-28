@@ -2,10 +2,10 @@
 
 ## Summary
 
-Slice 7 Dashboard foundation was reviewed. The dashboard navigation entry,
-presentation screen, KPI cards, provider usage, states, and active handoff
-documentation match the current task and binding documents. No review findings
-were found.
+Slice 8a Setup persistence foundation was reviewed. The database migration,
+setup domain files, SQLite repository files, Riverpod providers, tests, and
+active handoff documentation match the current task and binding documents. No
+review findings were found.
 
 ## Files Changed
 
@@ -15,23 +15,27 @@ were found.
 
 ## Code Reviewed
 
-- `lib/presentation/app_home.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
+- `lib/data/database/app_database.dart`
+- `lib/domain/setups/setup.dart`
+- `lib/domain/setups/setup_repository.dart`
+- `lib/data/setups/setup_mapper.dart`
+- `lib/data/setups/sqlite_setup_repository.dart`
+- `lib/presentation/setups/setup_providers.dart`
+- `test/app_database_test.dart`
+- `test/setup_repository_test.dart`
 
 ## Not Changed
 
 - app code during review
-- database schema
-- repositories
+- database schema during review
+- repositories during review
+- dashboard
 - performance formulas
 - stored performance KPIs
-- charts
-- equity curve
-- account equity calculation
-- time-period grouping
-- session breakdowns
 - setup seeds
 - setup selection
+- setup filtering
+- setup management UI
 - export/import
 - trading recommendations, judging, optimization, or automation
 - final color-token polishing
@@ -39,15 +43,12 @@ were found.
 ## Open Questions
 
 - Initial setup seeds are still undefined.
-- Setup filtering remains out of scope until setup seed or empty setup behavior
-  is approved.
+- Setup selection behavior remains out of scope until setup seed or empty setup
+  behavior is approved.
 - Exact UI color tokens are still unapproved.
 
 ## Verification
 
-Already run after implementation:
-
-- `flutter pub get` passed
 - `dart format .` passed, 0 files changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
@@ -59,7 +60,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add dashboard foundation
+feat: add setup persistence foundation
 ```
 
 ## Recommended Next Mode
@@ -68,5 +69,6 @@ feat: add dashboard foundation
 
 ## Reason
 
-Slice 7 is complete and reviewed. The next slice should be defined before any
-chart, equity, export, or additional dashboard work is added.
+Slice 8a is complete and reviewed. The next slice should be defined before any
+export/import, setup selection, setup filtering, or additional dashboard work is
+added.

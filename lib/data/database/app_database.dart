@@ -25,10 +25,11 @@ class AppDatabase {
     final database = await factory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-        version: 3,
+        version: 4,
         onCreate: (db, version) async {
           await _createAccountsTable(db);
           await _createInstrumentsTable(db);
+          await _createSetupsTable(db);
           await _createTradesTable(db);
           await _seedInstruments(db);
         },
@@ -39,6 +40,9 @@ class AppDatabase {
           }
           if (oldVersion < 3) {
             await _createTradesTable(db);
+          }
+          if (oldVersion < 4) {
+            await _createSetupsTable(db);
           }
         },
       ),
@@ -68,6 +72,18 @@ CREATE TABLE instruments (
   id TEXT PRIMARY KEY,
   symbol TEXT NOT NULL,
   name TEXT,
+  is_active INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+)
+''');
+  }
+
+  Future<void> _createSetupsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE setups (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
   is_active INTEGER NOT NULL,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL

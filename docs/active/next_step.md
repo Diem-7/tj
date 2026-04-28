@@ -6,33 +6,34 @@
 
 ## Reason
 
-Slice 7 is implemented, verified, and reviewed with no findings. The next slice
-needs exact scope definition before any chart, equity, export, or further
-dashboard work begins.
+Slice 8a is implemented, verified, and reviewed with no findings. The next
+slice needs exact scope definition before export/import, setup selection, or
+additional dashboard work begins.
 
 ## Suggested Next Definition Scope
 
-- decide whether the next slice is dashboard progression, dashboard sessions,
-  equity curve, or export/import
-- define the exact displayed values before implementation
-- document any needed domain calculation before UI work
-- keep all displayed values derived from trades
+- decide whether the next slice is export foundation, setup seed definition, or
+  setup selection
+- define the exact data shape before export/import implementation
+- keep merge conflict behavior out of scope unless it is explicitly defined
 - keep setup filtering out of scope until setup seed behavior is approved
 
 ## Do Not Implement Yet
 
-- charts
+- setup selection in trade forms
+- setup filtering
+- setup create/edit/delete UI
+- predefined setup seed names
+- dashboard charts
 - equity curve
 - account equity calculation
 - time-period grouping
 - session breakdowns
-- setup filtering or setup selection
 - export/import
 - recommendations, judging, optimization, or automation
 
-## Verification Already Run For Slice 7
+## Verification Already Run For Slice 8a
 
-- `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`
