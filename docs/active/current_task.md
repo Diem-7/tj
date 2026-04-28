@@ -6,12 +6,12 @@
 
 ## Task
 
-Review Slice 8a: Setup persistence foundation.
+Review Slice 8b: JSON export foundation.
 
 ## Goal
 
-Check the implemented setup persistence foundation against the binding
-documents before export/import or setup UI work starts.
+Review the read-only JSON export foundation against the binding documents before
+import, file save UI, setup workflow, or dashboard work starts.
 
 ## Review Result
 
@@ -19,84 +19,52 @@ No findings.
 
 ## Reason
 
-`Setup` is part of the binding v1 domain model and the `setups` table is part of
-the binding v1 database model. Current implementation has `setup_id` on trades,
-but no setup entity, table, mapper, or repository. Export/import requires a
-stable data shape that includes `setups`, so this foundation should exist before
-export data is produced.
-
-## Scope
-
-- add a `setups` table through a non-destructive database migration
-- add a `Setup` domain entity
-- add a setup repository interface
-- add a SQLite setup repository implementation
-- add a setup mapper
-- expose setup listing through Riverpod if needed by the repository pattern
-- keep setup seeds empty for now
-- add focused tests for database migration/table creation and setup mapping or
-  repository listing
-
-## Out Of Scope
-
-- setup selection in trade forms
-- setup filtering
-- setup create/edit/delete UI
-- predefined setup seed names
-- dashboard changes
-- export/import implementation
-- trading recommendations, judging, optimization, or automation
-- UI color-token polishing
-
-## Acceptance Criteria
-
-- The SQLite schema includes `setups` with the fields from
-  `docs/database_model_v1.md`.
-- Existing databases migrate without data loss.
-- Setup IDs are UUID strings stored as `TEXT`.
-- Code, database fields, and enum-like values remain English.
-- No setup seeds are inserted until names are approved.
-- No SQL is added to UI files.
-- No business logic is added to UI files.
-- No performance KPI is stored.
-- Trades remain the only source of performance truth.
-- All touched files stay under 300 lines.
-- Active handoff documentation is updated after implementation.
-
-## Implementation Result
-
-- Added the `setups` table to new databases.
-- Added a version 4 migration that creates `setups` for existing databases.
-- Added setup domain, mapper, SQLite repository, and Riverpod providers.
-- Kept setup seeds empty because initial setup names are still undefined.
-- Added focused tests for empty setup listing and v3-to-v4 migration.
+The export foundation should preserve journal data in the documented JSON shape
+without creating duplicate performance truth, import write behavior, or UI-layer
+business logic.
 
 ## Reviewed Scope
 
-- database version 4 migration for `setups`
-- setup domain entity and repository interface
-- SQLite setup mapper and repository
-- setup Riverpod providers
-- setup repository test
-- database migration test
+- `lib/domain/export/journal_export.dart`
+- `lib/domain/export/journal_export_service.dart`
+- `test/journal_export_service_test.dart`
 - active handoff documentation
 
 ## Acceptance Notes
 
-- The SQLite schema includes `setups` with the fields from
-  `docs/database_model_v1.md`.
-- Existing database migration is covered by a focused v3-to-v4 test.
-- No setup seeds were inserted.
+- Export JSON has the required top-level keys: `schemaVersion`, `exportedAt`,
+  `app`, and `data`.
+- Export data includes `accounts`, `instruments`, `setups`, and `trades`.
+- Export generation reads through repository interfaces.
 - No SQL was added to UI files.
-- No business logic was added to UI files.
-- No performance KPI was stored.
-- Trades remain the only source of performance truth.
-- Setup selection, filtering, management UI, and export/import remain out of
-  scope.
+- No export business logic was added to UI files.
+- No import write behavior was added.
+- No replace or merge behavior was added.
+- No performance KPI is stored or exported as stored truth.
+- `r_multiple` is not exported.
+- `net_pnl` remains the central performance value on trades.
+- Code and JSON keys remain English.
 - All touched files stay under 300 lines.
+
+## Not Changed
+
+- database schema
+- existing repositories
+- UI screens
+- dashboard
+- performance formulas
+- stored performance KPIs
+- setup seeds
+- setup selection
+- setup filtering
+- setup management UI
+- JSON import
+- import merge or replace behavior
+- trading recommendations, judging, optimization, or automation
 
 ## Open Questions
 
+- Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
 - Setup selection behavior remains out of scope until setup seed or empty setup
   behavior is approved.
@@ -104,6 +72,6 @@ export data is produced.
 
 ## Verification
 
-- `dart format .` passed, 0 files changed
+- `dart format .` passed, 1 file changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed

@@ -2,10 +2,9 @@
 
 ## Summary
 
-Slice 8a Setup persistence foundation was reviewed. The database migration,
-setup domain files, SQLite repository files, Riverpod providers, tests, and
-active handoff documentation match the current task and binding documents. No
-review findings were found.
+Slice 8b JSON export foundation was reviewed. The read-only export model,
+service, focused test, and active handoff documentation match the current task
+and binding documents. No review findings were found.
 
 ## Files Changed
 
@@ -15,20 +14,16 @@ review findings were found.
 
 ## Code Reviewed
 
-- `lib/data/database/app_database.dart`
-- `lib/domain/setups/setup.dart`
-- `lib/domain/setups/setup_repository.dart`
-- `lib/data/setups/setup_mapper.dart`
-- `lib/data/setups/sqlite_setup_repository.dart`
-- `lib/presentation/setups/setup_providers.dart`
-- `test/app_database_test.dart`
-- `test/setup_repository_test.dart`
+- `lib/domain/export/journal_export.dart`
+- `lib/domain/export/journal_export_service.dart`
+- `test/journal_export_service_test.dart`
 
 ## Not Changed
 
 - app code during review
 - database schema during review
-- repositories during review
+- existing repositories during review
+- UI screens
 - dashboard
 - performance formulas
 - stored performance KPIs
@@ -36,12 +31,13 @@ review findings were found.
 - setup selection
 - setup filtering
 - setup management UI
-- export/import
+- JSON import
+- import merge or replace behavior
 - trading recommendations, judging, optimization, or automation
-- final color-token polishing
 
 ## Open Questions
 
+- Import merge conflict handling for matching UUIDs remains undefined.
 - Initial setup seeds are still undefined.
 - Setup selection behavior remains out of scope until setup seed or empty setup
   behavior is approved.
@@ -49,7 +45,7 @@ review findings were found.
 
 ## Verification
 
-- `dart format .` passed, 0 files changed
+- `dart format .` passed, 1 file changed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
 
@@ -60,7 +56,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add setup persistence foundation
+feat: add json export foundation
 ```
 
 ## Recommended Next Mode
@@ -69,6 +65,6 @@ feat: add setup persistence foundation
 
 ## Reason
 
-Slice 8a is complete and reviewed. The next slice should be defined before any
-export/import, setup selection, setup filtering, or additional dashboard work is
+Slice 8b is complete and reviewed. The next implementation slice should be
+defined before import, file save UI, setup workflow, or dashboard expansion is
 added.
