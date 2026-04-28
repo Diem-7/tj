@@ -2,8 +2,8 @@
 
 ## Summary
 
-Slice 6 Performance foundation was reviewed. The central domain calculation,
-trade inclusion rules, Riverpod wiring, focused tests, and active handoff
+Slice 7 Dashboard foundation was reviewed. The dashboard navigation entry,
+presentation screen, KPI cards, provider usage, states, and active handoff
 documentation match the current task and binding documents. No review findings
 were found.
 
@@ -15,16 +15,16 @@ were found.
 
 ## Code Reviewed
 
-- `lib/domain/performance/performance_summary.dart`
-- `lib/presentation/trades/trade_providers.dart`
-- `test/performance_summary_test.dart`
+- `lib/presentation/app_home.dart`
+- `lib/presentation/dashboard/dashboard_screen.dart`
 
 ## Not Changed
 
 - app code during review
 - database schema
-- SQL queries
-- dashboard
+- repositories
+- performance formulas
+- stored performance KPIs
 - charts
 - equity curve
 - account equity calculation
@@ -34,12 +34,14 @@ were found.
 - setup selection
 - export/import
 - trading recommendations, judging, optimization, or automation
+- final color-token polishing
 
 ## Open Questions
 
 - Initial setup seeds are still undefined.
 - Setup filtering remains out of scope until setup seed or empty setup behavior
   is approved.
+- Exact UI color tokens are still unapproved.
 
 ## Verification
 
@@ -57,7 +59,7 @@ No findings.
 ## Suggested Commit Message
 
 ```text
-feat: add performance foundation
+feat: add dashboard foundation
 ```
 
 ## Recommended Next Mode
@@ -66,5 +68,5 @@ feat: add performance foundation
 
 ## Reason
 
-Slice 6 is complete and reviewed. The dashboard slice should be defined before
-any dashboard code is added.
+Slice 7 is complete and reviewed. The next slice should be defined before any
+chart, equity, export, or additional dashboard work is added.

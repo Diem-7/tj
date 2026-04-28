@@ -6,12 +6,12 @@
 
 ## Task
 
-Review Slice 6: Performance foundation.
+Review Slice 7: Dashboard foundation.
 
 ## Goal
 
-Check the implemented performance foundation against the binding documents
-before dashboard work is defined.
+Check the implemented dashboard foundation against the binding documents before
+the next slice is defined.
 
 ## Review Result
 
@@ -19,40 +19,37 @@ No findings.
 
 ## Reviewed Scope
 
-- central `PerformanceSummary` domain calculation
-- exclusion of open, partial, and missing-`netPnl` trades
-- net PnL, winrate, profit factor, average R, trade count, best trade, and
-  worst trade rules
-- Riverpod performance provider from filtered trades
-- focused performance tests
+- dashboard navigation entry in `AppHome`
+- dashboard screen in the presentation layer
+- KPI cards sourced from `performanceSummaryProvider`
+- loading, error, and empty-performance states
+- German UI labels
+- absence of charts, equity curve, database changes, and new formulas
 - active handoff documentation
 
 ## Acceptance Notes
 
-- Performance logic lives in the domain layer.
-- UI and providers do not duplicate KPI formulas.
-- SQL remains in the data layer only.
-- Calculations use filtered closed trades.
-- Open trades do not influence performance.
-- Trades without both `closedAt` and `exitPrice` do not influence performance.
-- Trades with null `netPnl` do not influence performance values.
-- `tradeCount` counts only trades included in performance calculations.
-- `netPnl` is the sum of included trade `netPnl` values.
-- `winrate` is wins divided by included trade count.
-- `profitFactor` is gross profit divided by absolute gross loss.
-- `averageR` averages only non-null R values.
-- `bestTrade` and `worstTrade` are selected by `netPnl`.
-- No performance values are stored.
+- Dashboard is reachable from app navigation.
+- Dashboard remains in the presentation layer.
+- Dashboard uses `performanceSummaryProvider` as its data source.
+- UI does not contain SQL.
+- UI does not add stored KPIs.
+- KPI calculations remain in `PerformanceSummary`.
+- Dashboard is card-based and table-free.
+- Loading, error, and empty states are present.
+- No chart or equity curve was added.
 - No database migration was added.
-- No dashboard UI was added.
+- No repository was added.
 - Code, database, and enum names remain English.
-- All reviewed files stay under 300 lines.
+- UI text is German.
+- All touched files stay under 300 lines.
 
 ## Open Questions
 
 - Initial setup seeds are still undefined.
 - Setup filtering remains out of scope until setup seed or empty setup behavior
   is approved.
+- Exact UI color tokens are still unapproved.
 
 ## Verification
 

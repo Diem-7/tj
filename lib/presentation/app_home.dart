@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'accounts/accounts_screen.dart';
+import 'dashboard/dashboard_screen.dart';
 import 'instruments/instruments_screen.dart';
 import 'trades/trades_screen.dart';
 
@@ -25,6 +26,11 @@ class _AppHomeState extends State<AppHome> {
         },
         destinations: const [
           NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.account_balance_wallet_outlined),
             selectedIcon: Icon(Icons.account_balance_wallet),
             label: 'Konten',
@@ -45,4 +51,9 @@ class _AppHomeState extends State<AppHome> {
   }
 }
 
-const _screens = [AccountsScreen(), InstrumentsScreen(), TradesScreen()];
+const _screens = [
+  DashboardScreen(),
+  AccountsScreen(),
+  InstrumentsScreen(),
+  TradesScreen(),
+];
