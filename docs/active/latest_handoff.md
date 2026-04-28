@@ -2,9 +2,10 @@
 
 ## Summary
 
-The Slice 9b UUID validation fix was reviewed with no findings. The JSON import
-parser now rejects invalid UUID values for imported entity IDs and trade
-reference IDs before returning typed import data.
+Slice 9c was reviewed with no findings. The JSON import executor now supports
+parsed `JournalImportData` in replace or merge mode through data-layer SQLite
+transactions, and focused tests cover replace, rollback, merge, and skipped
+conflict counts.
 
 ## Files Changed
 
@@ -14,8 +15,11 @@ reference IDs before returning typed import data.
 
 ## Code Reviewed
 
-- `lib/domain/import/journal_import_parser.dart`
-- `test/journal_import_parser_test.dart`
+- `lib/domain/import/journal_import_execution.dart`
+- `lib/data/import/sqlite_journal_import_executor.dart`
+- `lib/data/instruments/instrument_mapper.dart`
+- `lib/data/setups/setup_mapper.dart`
+- `test/journal_import_executor_test.dart`
 
 ## Review Findings
 
@@ -23,27 +27,25 @@ No findings.
 
 ## Review Notes
 
-- Account, instrument, setup, and trade `id` values must be UUID strings.
-- Trade `account_id` and `instrument_id` must be UUID strings.
-- Optional trade `setup_id` may be null, but must be a UUID string when set.
-- Invalid UUID values reject the whole import through `JournalImportException`.
-- Parser remains non-mutating.
-- Parser remains in the domain layer.
-- Parser does not reference SQLite, repositories, Riverpod, or UI.
-- The invalid UUID case is covered by a focused parser test.
+- Import mode and result contracts are domain-level and presentation-free.
+- Replace clears and inserts all v1 import tables in one transaction.
+- Replace rollback behavior is covered by a failed insert test.
+- Merge inserts only non-conflicting UUID records.
+- Merge keeps local records when UUIDs match.
+- Skipped conflicts are counted across accounts, instruments, setups, and
+  trades.
+- SQL and transaction logic remain in the data layer.
+- Parser, Riverpod providers, and UI remain unchanged.
 - No file exceeds 300 lines.
-- `journal_import_parser.dart` is close to the file size limit and should not
-  absorb large future import execution logic.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- repositories
+- parser behavior
+- repository contracts
 - Riverpod providers
 - import UI
-- database replace or merge behavior
-- transaction implementation
 - export model shape
 - dashboard behavior
 - performance formulas
@@ -54,17 +56,21 @@ No findings.
 - setup management UI
 - recommendations, judging, optimization, or automation
 
-## Non-Blocking Open Questions
+## Open Questions
 
-- Initial setup seeds are still undefined, but not relevant for the import
-  parser slice.
-- Exact UI color tokens are still unapproved, but not relevant for the import
-  parser slice.
+No blocking questions for Slice 9c.
+
+Non-blocking:
+
+- Initial setup seeds are still undefined, but not relevant for the reviewed
+  import execution slice.
+- Exact UI color tokens are still unapproved, but not relevant for the reviewed
+  import execution slice.
 
 ## Verification
 
-No verification command was run during review. The UUID fix verification was
-already run during execute:
+No verification command was run during review. Slice 9c verification was already
+run during execute:
 
 - `flutter pub get`
 - `dart format .`
@@ -74,7 +80,7 @@ already run during execute:
 ## Suggested Commit Message
 
 ```text
-fix: validate import ids as uuids
+feat: add json import executor
 ```
 
 ## Recommended Next Mode
@@ -83,6 +89,6 @@ fix: validate import ids as uuids
 
 ## Reason
 
-Slice 9b and its UUID validation fix are reviewed with no findings. The next
-import implementation slice needs exact scope definition before database
-replace, merge, transaction, provider, or UI work begins.
+Slice 9c is implemented, verified, and reviewed with no findings. The next
+import integration slice needs exact scope definition before provider or UI work
+begins.

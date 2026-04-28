@@ -11,4 +11,15 @@ class InstrumentMapper {
       updatedAt: DateTime.parse(map['updated_at']! as String),
     );
   }
+
+  static Map<String, Object?> toInsertMap(Instrument instrument) {
+    return {
+      'id': instrument.id,
+      'symbol': instrument.symbol,
+      'name': instrument.name,
+      'is_active': instrument.isActive ? 1 : 0,
+      'created_at': instrument.createdAt.toIso8601String(),
+      'updated_at': instrument.updatedAt.toIso8601String(),
+    };
+  }
 }
