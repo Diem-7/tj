@@ -8,11 +8,12 @@ import '../instruments/instrument_mapper.dart';
 import '../setups/setup_mapper.dart';
 import '../trades/trade_mapper.dart';
 
-class SqliteJournalImportExecutor {
+class SqliteJournalImportExecutor implements JournalImportExecutor {
   const SqliteJournalImportExecutor(this._database);
 
   final AppDatabase _database;
 
+  @override
   Future<JournalImportResult> execute({
     required JournalImportData data,
     required JournalImportMode mode,

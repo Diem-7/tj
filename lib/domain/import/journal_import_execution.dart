@@ -1,4 +1,13 @@
+import 'journal_import.dart';
+
 enum JournalImportMode { replace, merge }
+
+abstract class JournalImportExecutor {
+  Future<JournalImportResult> execute({
+    required JournalImportData data,
+    required JournalImportMode mode,
+  });
+}
 
 class JournalImportResult {
   const JournalImportResult({

@@ -6,12 +6,12 @@
 
 ## Task
 
-Review Slice 9c: JSON import execution contracts.
+Review Slice 9d: JSON import provider wiring.
 
 ## Goal
 
-Review the non-UI JSON import execution slice before any Riverpod provider,
-file picker UI, confirmation dialog, or unrelated workflow work starts.
+Review the provider-wiring slice before any file picker UI, confirmation dialog,
+or broader import workflow work starts.
 
 ## Review Result
 
@@ -21,36 +21,35 @@ No findings.
 
 - `lib/domain/import/journal_import_execution.dart`
 - `lib/data/import/sqlite_journal_import_executor.dart`
-- `lib/data/instruments/instrument_mapper.dart`
-- `lib/data/setups/setup_mapper.dart`
-- `test/journal_import_executor_test.dart`
+- `lib/presentation/import/import_action.dart`
+- `lib/presentation/import/import_providers.dart`
+- `test/import_action_test.dart`
 - active handoff documentation
 
 ## Review Notes
 
-- `JournalImportMode` and `JournalImportResult` provide the defined execution
-  contract without UI or Riverpod coupling.
-- Replace runs inside one SQLite transaction.
-- Replace clears all v1 tables in dependency-safe order before inserting import
-  rows.
-- Replace rollback is covered by a duplicate primary key insert test.
-- Merge runs inside one SQLite transaction.
-- Merge checks conflicts by UUID per v1 table.
-- Merge keeps local records when UUIDs match and skips imported conflicts.
-- Merge result counts match imported rows and skipped conflicts in tests.
-- Import execution remains outside `journal_import_parser.dart`.
-- SQL and database mutation remain in the data layer.
+- `JournalImportExecutor` is a small domain contract and does not introduce UI
+  or SQL into the domain layer.
+- `SqliteJournalImportExecutor` remains the data-layer implementation.
+- Import providers only construct dependencies and do not execute imports.
+- `ImportAction.executeJsonText` requires an explicit `JournalImportMode`.
+- JSON parsing and domain import validation happen before executor mutation.
+- Tests cover successful parse-and-execute, non-object JSON rejection, and
+  invalid row rejection before execution.
+- SQL and transaction behavior remain in the data layer.
+- File picker UI and confirmation dialogs remain unimplemented.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- parser behavior
+- parser row rules
+- replace behavior
+- merge behavior
 - repository contracts
-- Riverpod providers
-- import UI
-- export model shape
+- file picker UI
+- import confirmation dialogs
 - dashboard behavior
 - performance formulas
 - stored performance KPIs
@@ -62,21 +61,21 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 9c.
+No blocking questions for Slice 9d.
 
 Non-blocking:
 
 - Initial setup seeds are still undefined, but not relevant for the reviewed
-  import execution slice.
+  import provider wiring.
 - Exact UI color tokens are still unapproved, but not relevant for the reviewed
-  import execution slice.
+  import provider wiring.
 
 ## Verification
 
-No verification command was run during review. Slice 9c verification was already
+No verification command was run during review. Slice 9d verification was already
 run during execute:
 
-- `flutter pub get`
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+- `flutter pub get` passed
+- `dart format .` passed
+- `flutter analyze` passed with no issues
+- `flutter test` passed, 33 tests

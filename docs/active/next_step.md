@@ -6,24 +6,22 @@
 
 ## Reason
 
-Slice 9c is implemented, verified, and reviewed with no findings. The next
-import slice should be defined before provider or UI work begins.
+Slice 9d is implemented, verified, and reviewed with no findings. The next
+import slice should be defined before UI work begins so file picking,
+confirmation, and mutation timing stay explicit.
 
 ## Suggested Next Definition Scope
 
-- define the next JSON import integration slice
-- likely decide whether the next slice is:
-  - Riverpod import provider wiring around parser and executor
-  - or import confirmation/file picker UI
-- keep user confirmation explicit before replace or merge can mutate data
-- keep parser and executor contracts stable unless review finds a concrete need
+- define the next JSON import UI integration slice
+- likely focus on import file picker plus preview/confirmation boundary
+- require explicit user choice between replace and merge before mutation
+- use the existing `importActionProvider`
+- keep parser, executor, and provider contracts stable unless review finds a
+  concrete need
 - keep dashboard, setup, and performance work out of scope
 
 ## Do Not Implement Yet
 
-- file picker import UI
-- Riverpod import providers
-- import confirmation dialogs
 - dashboard charts
 - setup selection in trade forms
 - setup filtering
@@ -33,7 +31,7 @@ import slice should be defined before provider or UI work begins.
 
 ## Verification Already Run
 
-For Slice 9c:
+For Slice 9d:
 
 - `flutter pub get`
 - `dart format .`

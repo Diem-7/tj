@@ -2,10 +2,10 @@
 
 ## Summary
 
-Slice 9c was reviewed with no findings. The JSON import executor now supports
-parsed `JournalImportData` in replace or merge mode through data-layer SQLite
-transactions, and focused tests cover replace, rollback, merge, and skipped
-conflict counts.
+Slice 9d was reviewed with no findings. The import parser and SQLite executor
+are exposed through Riverpod, and `ImportAction` provides a presentation entry
+point that parses JSON text before executing replace or merge with an explicit
+mode.
 
 ## Files Changed
 
@@ -17,9 +17,9 @@ conflict counts.
 
 - `lib/domain/import/journal_import_execution.dart`
 - `lib/data/import/sqlite_journal_import_executor.dart`
-- `lib/data/instruments/instrument_mapper.dart`
-- `lib/data/setups/setup_mapper.dart`
-- `test/journal_import_executor_test.dart`
+- `lib/presentation/import/import_action.dart`
+- `lib/presentation/import/import_providers.dart`
+- `test/import_action_test.dart`
 
 ## Review Findings
 
@@ -27,26 +27,26 @@ No findings.
 
 ## Review Notes
 
-- Import mode and result contracts are domain-level and presentation-free.
-- Replace clears and inserts all v1 import tables in one transaction.
-- Replace rollback behavior is covered by a failed insert test.
-- Merge inserts only non-conflicting UUID records.
-- Merge keeps local records when UUIDs match.
-- Skipped conflicts are counted across accounts, instruments, setups, and
-  trades.
-- SQL and transaction logic remain in the data layer.
-- Parser, Riverpod providers, and UI remain unchanged.
+- `JournalImportExecutor` keeps the execution contract at the domain boundary.
+- `SqliteJournalImportExecutor` remains the data-layer implementation.
+- Provider creation does not mutate data.
+- `ImportAction.executeJsonText` requires a caller-provided
+  `JournalImportMode`.
+- Invalid JSON shape and invalid import rows are rejected before the executor is
+  called.
+- No file picker UI or confirmation dialog was added.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
 - SQLite schema
-- parser behavior
+- parser row rules
+- replace behavior
+- merge behavior
 - repository contracts
-- Riverpod providers
-- import UI
-- export model shape
+- file picker UI
+- import confirmation dialogs
 - dashboard behavior
 - performance formulas
 - stored performance KPIs
@@ -58,29 +58,29 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 9c.
+No blocking questions for Slice 9d.
 
 Non-blocking:
 
 - Initial setup seeds are still undefined, but not relevant for the reviewed
-  import execution slice.
+  import provider wiring.
 - Exact UI color tokens are still unapproved, but not relevant for the reviewed
-  import execution slice.
+  import provider wiring.
 
 ## Verification
 
-No verification command was run during review. Slice 9c verification was already
+No verification command was run during review. Slice 9d verification was already
 run during execute:
 
-- `flutter pub get`
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+- `flutter pub get` passed
+- `dart format .` passed
+- `flutter analyze` passed with no issues
+- `flutter test` passed, 33 tests
 
 ## Suggested Commit Message
 
 ```text
-feat: add json import executor
+feat: wire json import providers
 ```
 
 ## Recommended Next Mode
@@ -89,6 +89,5 @@ feat: add json import executor
 
 ## Reason
 
-Slice 9c is implemented, verified, and reviewed with no findings. The next
-import integration slice needs exact scope definition before provider or UI work
-begins.
+The next import UI slice needs exact scope approval before file picker,
+confirmation, or mutation workflow code is added.
