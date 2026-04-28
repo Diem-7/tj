@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/trades/trade.dart';
 import 'trade_create_action.dart';
+import 'trade_edit_action.dart';
 import 'trade_filter_controls.dart';
 import 'trade_labels.dart';
 import 'trade_providers.dart';
@@ -63,13 +64,24 @@ class _TradeList extends StatelessWidget {
           child: ListTile(
             title: Text('${trade.direction.label} ${trade.quantity}'),
             subtitle: Text(_subtitle(trade)),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(trade.isClosed ? 'Geschlossen' : 'Offen'),
-                Text(_netPnlText(trade)),
-              ],
+            trailing: SizedBox(
+              width: 132,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(trade.isClosed ? 'Geschlossen' : 'Offen'),
+                        Text(_netPnlText(trade)),
+                      ],
+                    ),
+                  ),
+                  TradeEditAction(trade: trade),
+                ],
+              ),
             ),
           ),
         );

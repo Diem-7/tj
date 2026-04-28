@@ -2,9 +2,9 @@
 
 ## Summary
 
-Slice 12 was reviewed with no findings. Import failure messages now surface the
-specific parser reason or malformed JSON reason while keeping import behavior
-and the import/export format unchanged.
+Slice 13 was reviewed with no findings. Existing trades now expose an edit
+action in the trade list, open a prefilled dialog, and save manual changes
+through `TradeRepository.update`.
 
 ## Files Changed
 
@@ -14,9 +14,13 @@ and the import/export format unchanged.
 
 ## Code Reviewed
 
-- `lib/presentation/import/import_button.dart`
-- `lib/presentation/import/import_error_message.dart`
-- `test/import_error_message_test.dart`
+- `lib/presentation/trades/trade_create_dialog.dart`
+- `lib/presentation/trades/trade_edit_action.dart`
+- `lib/presentation/trades/trade_form_dialog.dart`
+- `lib/presentation/trades/trade_form_formatting.dart`
+- `lib/presentation/trades/trade_form_input.dart`
+- `lib/presentation/trades/trades_screen.dart`
+- `test/trade_repository_test.dart`
 
 ## Review Findings
 
@@ -24,13 +28,16 @@ No findings.
 
 ## Review Notes
 
-- `ImportButton` still owns the import workflow and delegates only message
-  formatting.
-- `JournalImportException.message` is shown without noisy exception object text.
-- `FormatException.message` is shown without noisy exception object text.
-- Focused tests cover parser errors and malformed JSON errors.
-- Import parser behavior and import execution behavior did not change.
-- Import/export JSON format did not change.
+- Trade creation still routes through `TradeRepository.create`.
+- Trade editing routes through `TradeRepository.update`.
+- The edit dialog is prefilled from the selected trade.
+- The edit action invalidates trade and performance providers after save.
+- `net_pnl` remains manual input and is not inferred from prices.
+- No SQL was added to UI code.
+- No performance KPI calculation was added to UI code.
+- No delete behavior was added.
+- No setup selection or setup management was added.
+- No SQLite schema or import/export format changed.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
@@ -39,12 +46,9 @@ No findings.
 - tests
 - SQLite schema
 - repository contracts
-- parser behavior
-- import execution behavior
-- import/export JSON format
-- replace or merge behavior
+- import/export behavior
 - dashboard formulas
-- trade edit or delete
+- trade delete
 - open trade creation
 - auto-PnL calculation or suggestion
 - setup seeds
@@ -54,28 +58,27 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 12.
+No blocking questions for Slice 13.
 
 Non-blocking:
 
-- Parser reasons are still English because code, database, and enums use English;
-  the surrounding user-facing import failure text remains German.
-- Existing invalid exports remain invalid; this slice only makes the reason
-  visible.
+- Setup seeds and setup selection remain unresolved and out of scope.
+- Exact UI color tokens remain unresolved and were not needed for this slice.
 
 ## Verification
 
-No verification command was run during review. Slice 12 verification was already
+No verification command was run during review. Slice 13 verification was already
 run during execute:
 
-- `dart format .` passed, 0 files changed
+- `flutter pub get` passed
+- `dart format .` passed
 - `flutter analyze` passed, no issues found
-- `flutter test` passed, 39 tests
+- `flutter test` passed, 40 tests
 
 ## Suggested Commit Message
 
 ```text
-fix: show import parser error reasons
+feat: add minimal trade edit flow
 ```
 
 ## Recommended Next Mode
@@ -84,5 +87,5 @@ fix: show import parser error reasons
 
 ## Reason
 
-Slice 12 is complete and reviewed. The next slice should be defined explicitly
+Slice 13 is complete and reviewed. The next slice should be defined explicitly
 before implementation starts.

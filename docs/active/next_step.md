@@ -6,25 +6,23 @@
 
 ## Reason
 
-Slice 12 is implemented, verified, and reviewed with no findings. The next
+Slice 13 is implemented, verified, and reviewed with no findings. The next
 slice should be defined before more code changes begin.
 
 ## Suggested Next Definition Scope
 
 Recommended next slice:
 
-- add minimal trade edit UI for existing trades
-- keep trade delete out of scope
-- keep open trade creation out of scope unless it is required for edit reuse and
-  explicitly documented
+- define the next smallest trade workflow improvement from the binding docs
+- keep trade delete out of scope unless explicitly selected
+- keep open trade creation out of scope unless explicitly selected
+- keep setup selection out of scope until setup seeds are confirmed
 - keep auto-PnL calculation or suggestion out of scope
-- keep setup selection or management out of scope
 - keep dashboard charts, schema changes, and import/export format changes out of
-  scope
+  scope unless selected as the next slice
 
 ## Do Not Implement Yet
 
-- trade edit
 - trade delete
 - open trade creation
 - auto-PnL calculation or suggestion
@@ -37,8 +35,9 @@ Recommended next slice:
 
 ## Verification Already Run
 
-For Slice 12:
+For Slice 13:
 
+- `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`
