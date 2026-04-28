@@ -23,28 +23,74 @@ void main() {
   });
 
   test('trade input validates required references and positive values', () {
-    final input = TradeInput(
+    final input = _input(
       accountId: '',
-      instrumentId: 'instrument-id',
-      setupId: null,
-      openedAt: DateTime.utc(2026),
       closedAt: null,
-      direction: TradeDirection.long,
-      entryPrice: 100,
       exitPrice: null,
-      stopLossPrice: null,
-      takeProfitPrice: null,
-      quantity: 1,
-      riskAmount: null,
-      fees: null,
       netPnl: null,
-      session: null,
-      rating: null,
-      notes: null,
     );
 
     expect(input.validate, throwsA(isA<TradeValidationException>()));
   });
+
+  test('trade input rejects partial closed state', () {
+    final withoutExit = _input(
+      closedAt: DateTime.utc(2026, 1, 2, 11),
+      exitPrice: null,
+      netPnl: 100,
+    );
+    final withoutClosedAt = _input(closedAt: null, exitPrice: 105, netPnl: 100);
+
+    expect(withoutExit.validate, throwsA(isA<TradeValidationException>()));
+    expect(withoutClosedAt.validate, throwsA(isA<TradeValidationException>()));
+  });
+
+  test('trade input requires net pnl for closed trades', () {
+    final input = _input(
+      closedAt: DateTime.utc(2026, 1, 2, 11),
+      exitPrice: 105,
+      netPnl: null,
+    );
+
+    expect(input.validate, throwsA(isA<TradeValidationException>()));
+  });
+
+  test('trade input accepts closed trades with net pnl', () {
+    final input = _input(
+      closedAt: DateTime.utc(2026, 1, 2, 11),
+      exitPrice: 105,
+      netPnl: 100,
+    );
+
+    expect(input.validate, returnsNormally);
+  });
+}
+
+TradeInput _input({
+  String accountId = 'account-id',
+  DateTime? closedAt,
+  double? exitPrice,
+  double? netPnl,
+}) {
+  return TradeInput(
+    accountId: accountId,
+    instrumentId: 'instrument-id',
+    setupId: null,
+    openedAt: DateTime.utc(2026),
+    closedAt: closedAt,
+    direction: TradeDirection.long,
+    entryPrice: 100,
+    exitPrice: exitPrice,
+    stopLossPrice: null,
+    takeProfitPrice: null,
+    quantity: 1,
+    riskAmount: null,
+    fees: null,
+    netPnl: netPnl,
+    session: null,
+    rating: null,
+    notes: null,
+  );
 }
 
 Trade _trade({

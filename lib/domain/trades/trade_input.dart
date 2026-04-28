@@ -56,6 +56,18 @@ class TradeInput {
         'Die Menge muss groesser als 0 sein.',
       );
     }
+    final hasClosedAt = closedAt != null;
+    final hasExitPrice = exitPrice != null;
+    if (hasClosedAt != hasExitPrice) {
+      throw const TradeValidationException(
+        'Geschlossene Trades brauchen Schlusszeit und Ausstiegspreis.',
+      );
+    }
+    if (hasClosedAt && netPnl == null) {
+      throw const TradeValidationException(
+        'Netto PnL ist fuer geschlossene Trades erforderlich.',
+      );
+    }
   }
 }
 

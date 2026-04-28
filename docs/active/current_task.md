@@ -6,11 +6,11 @@
 
 ## Task
 
-Review Slice 10: manual closed trade creation from the Trades screen.
+Review Slice 11: closed trade net PnL validation.
 
 ## Goal
 
-Review the manual closed trade creation path before expanding trade workflows.
+Review the validation fix before starting the next stabilization slice.
 
 ## Review Result
 
@@ -18,24 +18,22 @@ No findings.
 
 ## Reviewed Scope
 
-- `lib/presentation/trades/trades_screen.dart`
-- `lib/presentation/trades/trade_create_action.dart`
+- `lib/domain/trades/trade_input.dart`
 - `lib/presentation/trades/trade_create_dialog.dart`
-- `lib/presentation/trades/trade_create_parsing.dart`
+- `test/trade_domain_test.dart`
 - active handoff documentation
 
 ## Review Notes
 
-- The Trades screen exposes a manual create action.
-- The create action opens a focused dialog only when active accounts and
-  instruments are available.
-- Saving builds a `TradeInput` and calls `TradeRepository.create` through
-  `tradeRepositoryProvider`.
-- Successful save invalidates trades, filtered trades, and performance summary.
-- Closed trade creation requires closed date/time and exit price.
-- Setup selection, edit, delete, and open trade creation remained out of scope.
+- `TradeInput.validate` rejects partial closed state.
+- `TradeInput.validate` rejects closed trades without `netPnl`.
+- Closed manual trade creation parses `Netto PnL` as required.
+- Focused tests cover partial closed state, missing `netPnl`, and valid closed
+  trade input.
+- Import behavior and import/export formats were not changed.
+- Trade edit, trade delete, open trade creation, auto-PnL, and import error UX
+  stayed out of scope.
 - UI code contains no SQL.
-- No performance calculations were added to the UI.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
@@ -43,35 +41,33 @@ No findings.
 - app code
 - SQLite schema
 - repository contracts
-- domain models
-- import workflow
-- export workflow
-- dashboard metrics
-- performance formulas
-- stored performance KPI rules
-- setup seeds
-- setup selection
-- setup filtering
-- setup management UI
+- import behavior
+- export format
+- dashboard formulas
 - trade edit or delete
 - open trade creation
+- auto-PnL calculation or suggestion
+- setup seeds
+- setup selection
+- setup management UI
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 10.
+No blocking questions for Slice 11.
 
 Non-blocking:
 
-- Date/time input is currently text based and can be improved in a later UI
-  ergonomics slice.
-- Setup selection remains excluded until setup seeds and setup UI are defined.
+- Existing invalid local trades are not repaired by this slice.
+- Import error messages remain the next critical UX issue.
+- Old invalid export files remain invalid until data is corrected or a separate
+  repair/import strategy exists.
 
 ## Verification
 
-No verification command was run during review. Slice 10 verification was already
+No verification command was run during review. Slice 11 verification was already
 run during execute:
 
 - `dart format .` passed
 - `flutter analyze` passed with no issues
-- `flutter test` passed, 34 tests
+- `flutter test` passed, 37 tests

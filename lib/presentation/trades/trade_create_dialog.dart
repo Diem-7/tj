@@ -98,7 +98,7 @@ class _TradeCreateDialogState extends ConsumerState<TradeCreateDialog> {
               ),
               _numberField(_riskAmountController, 'Risiko', required: false),
               _numberField(_feesController, 'Gebuehren', required: false),
-              _numberField(_netPnlController, 'Netto PnL', required: false),
+              _numberField(_netPnlController, 'Netto PnL'),
               _sessionField(),
               _numberField(_ratingController, 'Rating', required: false),
               TextField(
@@ -286,7 +286,10 @@ class _TradeCreateDialogState extends ConsumerState<TradeCreateDialog> {
       ),
       riskAmount: TradeCreateParsing.optionalDouble(_riskAmountController.text),
       fees: TradeCreateParsing.optionalDouble(_feesController.text),
-      netPnl: TradeCreateParsing.optionalDouble(_netPnlController.text),
+      netPnl: TradeCreateParsing.requiredDouble(
+        _netPnlController.text,
+        'Netto PnL',
+      ),
       session: _session,
       rating: TradeCreateParsing.optionalInt(_ratingController.text),
       notes: _notesController.text,

@@ -6,29 +6,39 @@
 
 ## Reason
 
-Slice 10 is implemented, verified, and reviewed with no findings. The next
-product slice should be defined explicitly before more trade workflow work
-begins.
+Slice 11 is implemented, verified, and reviewed with no findings. The next
+stabilization slice should be defined before more code changes begin.
 
 ## Suggested Next Definition Scope
 
-- decide the next smallest trade workflow slice
-- consider manual trade edit, manual trade delete, date/time input ergonomics,
-  or setup selection only if explicitly selected
-- keep dashboard charts, setup management, and import/export changes out of
-  scope unless explicitly selected
-- preserve the Data -> Domain -> Presentation layering
+Recommended next slice:
+
+- improve import error messages so the concrete parser reason is visible
+- keep import behavior and import/export format unchanged
+- keep trade edit, auto-PnL, dashboard, schema, and setup work out of scope
+- add or update focused tests for import error display behavior
+
+## Next Priority After That
+
+- add minimal trade edit UI
+- consider auto-PnL suggestion only after validation and import UX are stable
 
 ## Do Not Implement Yet
 
+- trade edit
+- trade delete
+- open trade creation
+- auto-PnL calculation or suggestion
+- setup selection
+- setup management
 - dashboard charts
-- setup create/edit/delete UI
-- predefined setup seed names
-- recommendations, judging, optimization, or automation
+- schema changes
+- import/export format changes
+- recommendations, judging, optimization, or trading decisions
 
 ## Verification Already Run
 
-For Slice 10:
+For Slice 11:
 
 - `dart format .`
 - `flutter analyze`
