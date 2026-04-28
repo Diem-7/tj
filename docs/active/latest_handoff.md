@@ -2,9 +2,9 @@
 
 ## Summary
 
-Slice 11 was reviewed with no findings. Closed trade input now consistently
-requires `netPnl`, partial closed state is rejected, and the manual trade dialog
-requires `Netto PnL` for the current closed-trade creation flow.
+Slice 12 was reviewed with no findings. Import failure messages now surface the
+specific parser reason or malformed JSON reason while keeping import behavior
+and the import/export format unchanged.
 
 ## Files Changed
 
@@ -14,9 +14,9 @@ requires `Netto PnL` for the current closed-trade creation flow.
 
 ## Code Reviewed
 
-- `lib/domain/trades/trade_input.dart`
-- `lib/presentation/trades/trade_create_dialog.dart`
-- `test/trade_domain_test.dart`
+- `lib/presentation/import/import_button.dart`
+- `lib/presentation/import/import_error_message.dart`
+- `test/import_error_message_test.dart`
 
 ## Review Findings
 
@@ -24,22 +24,25 @@ No findings.
 
 ## Review Notes
 
-- Domain validation rejects partial closed state.
-- Domain validation rejects closed trade input without `netPnl`.
-- Manual trade creation no longer treats `Netto PnL` as optional.
-- Tests cover the new validation cases.
-- Import behavior and import/export formats did not change.
-- Trade edit, trade delete, open trade creation, auto-PnL, and import error UX
-  stayed out of scope.
+- `ImportButton` still owns the import workflow and delegates only message
+  formatting.
+- `JournalImportException.message` is shown without noisy exception object text.
+- `FormatException.message` is shown without noisy exception object text.
+- Focused tests cover parser errors and malformed JSON errors.
+- Import parser behavior and import execution behavior did not change.
+- Import/export JSON format did not change.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
+- tests
 - SQLite schema
 - repository contracts
-- import behavior
-- export format
+- parser behavior
+- import execution behavior
+- import/export JSON format
+- replace or merge behavior
 - dashboard formulas
 - trade edit or delete
 - open trade creation
@@ -51,28 +54,28 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 11.
+No blocking questions for Slice 12.
 
 Non-blocking:
 
-- Existing invalid local trades are not repaired by this slice.
-- Import error messages remain the next critical UX issue.
-- Old invalid export files remain invalid until data is corrected or a separate
-  repair/import strategy exists.
+- Parser reasons are still English because code, database, and enums use English;
+  the surrounding user-facing import failure text remains German.
+- Existing invalid exports remain invalid; this slice only makes the reason
+  visible.
 
 ## Verification
 
-No verification command was run during review. Slice 11 verification was already
+No verification command was run during review. Slice 12 verification was already
 run during execute:
 
-- `dart format .` passed
-- `flutter analyze` passed with no issues
-- `flutter test` passed, 37 tests
+- `dart format .` passed, 0 files changed
+- `flutter analyze` passed, no issues found
+- `flutter test` passed, 39 tests
 
 ## Suggested Commit Message
 
 ```text
-fix: require net pnl for closed trades
+fix: show import parser error reasons
 ```
 
 ## Recommended Next Mode
@@ -81,5 +84,5 @@ fix: require net pnl for closed trades
 
 ## Reason
 
-The validation fix is complete and reviewed. The next stabilization slice should
-be defined explicitly before implementation starts.
+Slice 12 is complete and reviewed. The next slice should be defined explicitly
+before implementation starts.

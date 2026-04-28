@@ -6,22 +6,21 @@
 
 ## Reason
 
-Slice 11 is implemented, verified, and reviewed with no findings. The next
-stabilization slice should be defined before more code changes begin.
+Slice 12 is implemented, verified, and reviewed with no findings. The next
+slice should be defined before more code changes begin.
 
 ## Suggested Next Definition Scope
 
 Recommended next slice:
 
-- improve import error messages so the concrete parser reason is visible
-- keep import behavior and import/export format unchanged
-- keep trade edit, auto-PnL, dashboard, schema, and setup work out of scope
-- add or update focused tests for import error display behavior
-
-## Next Priority After That
-
-- add minimal trade edit UI
-- consider auto-PnL suggestion only after validation and import UX are stable
+- add minimal trade edit UI for existing trades
+- keep trade delete out of scope
+- keep open trade creation out of scope unless it is required for edit reuse and
+  explicitly documented
+- keep auto-PnL calculation or suggestion out of scope
+- keep setup selection or management out of scope
+- keep dashboard charts, schema changes, and import/export format changes out of
+  scope
 
 ## Do Not Implement Yet
 
@@ -38,7 +37,7 @@ Recommended next slice:
 
 ## Verification Already Run
 
-For Slice 11:
+For Slice 12:
 
 - `dart format .`
 - `flutter analyze`

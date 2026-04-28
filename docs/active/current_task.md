@@ -6,11 +6,11 @@
 
 ## Task
 
-Review Slice 11: closed trade net PnL validation.
+Review Slice 12: import error messages show the concrete parser reason.
 
 ## Goal
 
-Review the validation fix before starting the next stabilization slice.
+Review the import error message change before defining the next slice.
 
 ## Review Result
 
@@ -18,31 +18,36 @@ No findings.
 
 ## Reviewed Scope
 
-- `lib/domain/trades/trade_input.dart`
-- `lib/presentation/trades/trade_create_dialog.dart`
-- `test/trade_domain_test.dart`
+- `lib/presentation/import/import_button.dart`
+- `lib/presentation/import/import_error_message.dart`
+- `test/import_error_message_test.dart`
 - active handoff documentation
 
 ## Review Notes
 
-- `TradeInput.validate` rejects partial closed state.
-- `TradeInput.validate` rejects closed trades without `netPnl`.
-- Closed manual trade creation parses `Netto PnL` as required.
-- Focused tests cover partial closed state, missing `netPnl`, and valid closed
-  trade input.
-- Import behavior and import/export formats were not changed.
-- Trade edit, trade delete, open trade creation, auto-PnL, and import error UX
-  stayed out of scope.
-- UI code contains no SQL.
+- `ImportButton` still owns the import workflow and now delegates only message
+  formatting to a presentation helper.
+- `importErrorMessage` surfaces `JournalImportException.message` without using
+  the exception object's `toString`.
+- `importErrorMessage` surfaces `FormatException.message` without showing noisy
+  exception object text.
+- Focused tests cover parser errors and malformed JSON errors.
+- Import parser behavior did not change.
+- Import execution behavior did not change.
+- Import/export JSON format did not change.
+- No SQL was added to UI code.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
 
 - app code
+- tests
 - SQLite schema
 - repository contracts
-- import behavior
-- export format
+- parser behavior
+- import execution behavior
+- import/export JSON format
+- replace or merge behavior
 - dashboard formulas
 - trade edit or delete
 - open trade creation
@@ -54,20 +59,20 @@ No findings.
 
 ## Open Questions
 
-No blocking questions for Slice 11.
+No blocking questions for Slice 12.
 
 Non-blocking:
 
-- Existing invalid local trades are not repaired by this slice.
-- Import error messages remain the next critical UX issue.
-- Old invalid export files remain invalid until data is corrected or a separate
-  repair/import strategy exists.
+- Parser reasons are still English because code, database, and enums use English;
+  the surrounding user-facing import failure text remains German.
+- Existing invalid exports remain invalid; this slice only makes the reason
+  visible.
 
 ## Verification
 
-No verification command was run during review. Slice 11 verification was already
+No verification command was run during review. Slice 12 verification was already
 run during execute:
 
-- `dart format .` passed
-- `flutter analyze` passed with no issues
-- `flutter test` passed, 37 tests
+- `dart format .` passed, 0 files changed
+- `flutter analyze` passed, no issues found
+- `flutter test` passed, 39 tests

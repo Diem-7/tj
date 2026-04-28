@@ -8,6 +8,7 @@ import '../accounts/account_providers.dart';
 import '../instruments/instrument_providers.dart';
 import '../setups/setup_providers.dart';
 import '../trades/trade_providers.dart';
+import 'import_error_message.dart';
 import 'import_providers.dart';
 
 class ImportButton extends ConsumerStatefulWidget {
@@ -159,10 +160,7 @@ class _ImportButtonState extends ConsumerState<ImportButton> {
   }
 
   String _errorMessage(Object error) {
-    if (error is JournalImportException || error is FormatException) {
-      return 'Import fehlgeschlagen: Die Importdatei ist ungueltig.';
-    }
-    return 'Import fehlgeschlagen: $error';
+    return importErrorMessage(error);
   }
 
   void _showMessage(String message) {
