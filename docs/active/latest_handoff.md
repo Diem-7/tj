@@ -2,64 +2,69 @@
 
 ## Summary
 
-Slice 3 Trades foundation was implemented. The app now has a trade domain model,
-basic trade rules, SQLite `trades` persistence, repository/provider wiring, a
-simple German trade list shell, and focused tests.
+Slice 5 Filter foundation was reviewed. The central filter model, closed-trade
+rules, `closedAt` time filtering, Riverpod wiring, German filter controls, and
+focused tests match the current task and binding documents. No review findings
+were found.
 
 ## Files Changed
 
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
-- `lib/data/database/app_database.dart`
-- `lib/data/trades/trade_mapper.dart`
-- `lib/data/trades/sqlite_trade_repository.dart`
-- `lib/domain/trades/trade.dart`
-- `lib/domain/trades/trade_input.dart`
-- `lib/domain/trades/trade_repository.dart`
-- `lib/presentation/app_home.dart`
-- `lib/presentation/trades/trade_labels.dart`
+
+## Code Reviewed
+
+- `lib/domain/trades/trade_filter.dart`
+- `lib/presentation/trades/trade_filter_controls.dart`
 - `lib/presentation/trades/trade_providers.dart`
 - `lib/presentation/trades/trades_screen.dart`
-- `test/app_database_test.dart`
-- `test/trade_domain_test.dart`
-- `test/trade_repository_test.dart`
-- `test/widget_test.dart`
+- `test/trade_filter_test.dart`
 
 ## Not Changed
 
-- setup table implementation
-- setup seed selection
-- filters
+- app code during review
+- database schema
+- SQL queries
+- performance KPI calculations
 - dashboard
-- performance calculations
+- equity curve
+- setup seeds
+- setup selection
 - export/import
 - trading recommendations, judging, optimization, or automation
 
 ## Open Questions
 
 - Initial setup seeds are still undefined.
-- Setup selection is intentionally out of scope until setup seeds or empty
-  setup behavior are approved.
+- Setup filtering remains out of scope until setup seed or empty setup behavior
+  is approved.
 
 ## Verification
 
+Already run after implementation:
+
 - `flutter pub get` passed
-- `dart format .` passed with no changes
+- `dart format .` passed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
+
+## Review Findings
+
+No findings.
 
 ## Suggested Commit Message
 
 ```text
-feat: add trades foundation
+feat: add trade filter foundation
 ```
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-Slice 3 is implemented and verified. The next step should review the slice
-against the binding documents before defining or building the next feature.
+Slice 5 is complete and reviewed. The next implementation slice should be
+defined before performance code changes begin.
+

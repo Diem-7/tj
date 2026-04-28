@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/trades/trade.dart';
+import 'trade_filter_controls.dart';
 import 'trade_labels.dart';
 import 'trade_providers.dart';
 
@@ -10,7 +11,7 @@ class TradesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final trades = ref.watch(tradesProvider);
+    final trades = ref.watch(filteredTradesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,10 +24,17 @@ class TradesScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: trades.when(
-        data: (items) => _TradeList(trades: items),
-        error: (error, stackTrace) => Center(child: Text('$error')),
-        loading: () => const Center(child: CircularProgressIndicator()),
+      body: Column(
+        children: [
+          const TradeFilterControls(),
+          Expanded(
+            child: trades.when(
+              data: (items) => _TradeList(trades: items),
+              error: (error, stackTrace) => Center(child: Text('$error')),
+              loading: () => const Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -40,7 +48,7 @@ class _TradeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (trades.isEmpty) {
-      return const Center(child: Text('Noch keine Trades erfasst.'));
+      return const Center(child: Text('Keine geschlossenen Trades im Filter.'));
     }
 
     return ListView.separated(

@@ -2,64 +2,62 @@
 
 ## Mode
 
-`execute_task`
+`review_task`
 
 ## Task
 
-Implement Slice 3: Trades foundation.
+Review Slice 5: Filter foundation.
 
 ## Goal
 
-Add the first trade domain, persistence, provider, UI shell, and focused tests
-without adding setups, filters, dashboard, export/import, or performance KPIs.
+Check the implemented filter foundation against the binding documents before
+the performance slice is defined.
 
-## Completed Scope
+## Review Result
 
-- added trade domain model with direction and session enums
-- added trade domain logic:
-  - `isClosed`
-  - `isWin`
-  - `isLoss`
-  - `rMultiple`
-- added trade input validation for required references and positive base values
-- added SQLite version 3 migration for `trades`
-- added trade mapper
-- added trade repository contract and SQLite implementation
-- wired Riverpod providers
-- added simple German trade list shell
-- added focused tests for trade persistence and domain logic
+No findings.
 
-## Explicitly Not Changed
+## Reviewed Scope
 
-- setup table implementation
-- setup seed selection
-- filters
-- performance calculations
-- dashboard
-- export/import
-- recommendations, judging, optimization, or automation
+- central `TradeFilter` domain model
+- closed-trade filter rule
+- `closedAt` date filtering
+- account, instrument, and session filter fields
+- Riverpod filter state and filtered trades provider
+- German filter controls on the trades screen
+- focused filter tests
+- active handoff documentation
 
 ## Acceptance Notes
 
-- `trades` table follows `docs/database_model_v1.md`
-- IDs are UUID strings stored as `TEXT`
-- `setup_id` is nullable
-- closed trade logic requires both `closed_at` and `exit_price`
-- `r_multiple` is calculated in domain and not stored
-- no stored performance KPIs were introduced
-- UI contains no SQL
-- domain contains no SQL and no UI
-- all files stay under 300 lines
+- Filter logic is centralized in `TradeFilter`.
+- UI widgets only update filter state.
+- SQL remains in the data layer.
+- Open trades are excluded from filtered analysis results.
+- Trades without both `closedAt` and `exitPrice` are excluded.
+- Time filters use `closedAt` only.
+- Account, instrument, and session filters can be unset.
+- Unset filters do not restrict closed trades.
+- No database schema changes were introduced.
+- No performance values are stored.
+- No performance KPIs were introduced.
+- Setup filtering stayed out of scope.
+- UI text is German.
+- Code, database, and enum values remain English.
+- All files stay under 300 lines.
 
 ## Open Questions
 
 - Initial setup seeds are still undefined.
-- Setup selection must wait until setup seeds or empty setup behavior are
-  explicitly approved.
+- Setup filtering remains out of scope until setup seed or empty setup behavior
+  is approved.
 
 ## Verification
 
+Verification was already run after implementation:
+
 - `flutter pub get` passed
-- `dart format .` passed with no changes
+- `dart format .` passed
 - `flutter analyze` passed with no issues
 - `flutter test` passed
+

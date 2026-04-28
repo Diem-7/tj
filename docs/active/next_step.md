@@ -2,34 +2,33 @@
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-Slice 3 is implemented and verified. A review pass should check architecture,
-data model alignment, UI boundary, and test coverage before defining the next
-slice.
+Slice 5 is implemented, verified, and reviewed with no findings. The next slice
+needs exact scope definition before performance work begins.
 
-## Review Scope
+## Suggested Next Definition Scope
 
-- confirm trade domain rules match `docs/domain_model_v1.md`
-- confirm `trades` schema matches `docs/database_model_v1.md`
-- confirm no `r_multiple` or performance KPI is stored
-- confirm UI contains no SQL and no trade calculations outside domain
-- confirm setup behavior stayed out of scope
-- confirm all files remain under 300 lines
+- define Slice 6 Performance
+- decide exact calculated values included in the first performance slice
+- keep performance calculations derived from filtered closed trades only
+- document included and excluded UI behavior before implementation
+- keep dashboard charts and equity curve separate unless explicitly included
 
-## Do Not Implement In Review
+## Do Not Implement Yet
 
-- setups
-- filters
 - dashboard
-- performance KPIs
+- equity curve
+- setup filter or setup selection
 - export/import
+- recommendations, judging, optimization, or automation
 
-## Verification Already Run
+## Verification Already Run For Slice 5
 
 - `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`
+
