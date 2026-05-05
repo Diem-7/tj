@@ -2,64 +2,74 @@
 
 ## Mode
 
-`execute_task`
+`review_task`
 
 ## Task
 
-Execute Slice 14: dashboard filter visibility.
+Review Slice 14: dashboard filter visibility.
 
 ## Goal
 
-Make the dashboard's filtered performance context visible and directly
-controllable from the dashboard, using the already existing central trade
-filter state.
+Review the implemented dashboard filter visibility slice before defining the
+next task.
 
-## Implementation
+## Review Result
 
-The dashboard now renders the existing `TradeFilterControls` above the
-performance content.
+No findings.
 
-## Scope Completed
+## Reviewed Scope
 
-- Exposed the existing filter controls on the dashboard.
-- Kept one shared filter state for trades and dashboard.
-- Kept dashboard metrics based on `performanceSummaryProvider`.
-- Kept filter behavior based on closed trades and `closed_at`.
-- Kept UI text in German.
+- `lib/presentation/dashboard/dashboard_screen.dart`
+- `docs/active/current_task.md`
+- `docs/active/next_step.md`
+- `docs/active/latest_handoff.md`
 
-## What Did Not Change
+## Review Notes
 
-- filter logic
-- stored KPIs
-- SQL usage
-- dashboard charts
-- performance metrics
-- dashboard formulas
+- The dashboard renders the existing `TradeFilterControls` above performance
+  content.
+- Dashboard metrics still flow through `performanceSummaryProvider`.
+- Dashboard and trade list still share the same central `tradeFilterProvider`.
+- No filter logic was duplicated in dashboard UI.
+- Closed-trade and `closed_at` filter rules remain in the domain filter.
+- No SQL was added to UI code.
+- No performance KPI calculation was added to UI code.
+- No dashboard charts, new KPIs, schema changes, or trade workflow changes were
+  added.
+- No file exceeds 300 lines.
+
+## What Did Not Change During Review
+
+- app code
+- tests
 - SQLite schema
+- repository contracts
 - import/export behavior
+- dashboard formulas
+- filter logic
 - trade delete
 - open trade creation
-- setup selection
-- setup management
 - setup seeds
+- setup selection
+- setup management UI
 - auto-PnL calculation or suggestion
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions.
+No blocking questions for Slice 14.
 
 Non-blocking:
 
-- The existing filter controls remain in `presentation/trades`. Reuse was kept
-  as-is for this small slice because the controls already represent the central
-  trade filter state and no new shared abstraction was needed.
+- The existing filter controls remain in `presentation/trades`. This is
+  acceptable for Slice 14 because no new shared abstraction was needed.
 - Setup seeds and setup selection remain unresolved and out of scope.
 - Exact UI color tokens remain unresolved and out of scope.
 
 ## Verification
 
-Completed:
+No verification command was run during review. Slice 14 verification was already
+run during execute:
 
 - `flutter pub get` passed
 - `dart format .` passed, 0 files changed

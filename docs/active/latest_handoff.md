@@ -2,34 +2,47 @@
 
 ## Summary
 
-Slice 14 was implemented. The dashboard now exposes the existing central trade
-filter controls above the performance content, so the displayed dashboard
+Slice 14 was reviewed with no findings. The dashboard now exposes the existing
+central trade filter controls above the performance content, so dashboard
 metrics can be filtered directly from the dashboard.
 
 ## Files Changed
 
-- `lib/presentation/dashboard/dashboard_screen.dart`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
-## What Changed
+## Code Reviewed
 
-- Added `TradeFilterControls` to the dashboard body.
-- Kept dashboard metric content in the same `performanceSummaryProvider` flow.
-- Updated active task and handoff documents for execute mode.
+- `lib/presentation/dashboard/dashboard_screen.dart`
 
-## What Did Not Change
+## Review Findings
 
-- filter logic
-- domain calculations
-- repository contracts
+No findings.
+
+## Review Notes
+
+- The dashboard renders the existing `TradeFilterControls` above performance
+  content.
+- Dashboard metrics still flow through `performanceSummaryProvider`.
+- Dashboard and trade list still share the same central `tradeFilterProvider`.
+- No filter logic was duplicated in dashboard UI.
+- Closed-trade and `closed_at` filter rules remain in the domain filter.
+- No SQL was added to UI code.
+- No performance KPI calculation was added to UI code.
+- No dashboard charts, new KPIs, schema changes, or trade workflow changes were
+  added.
+- No file exceeds 300 lines.
+
+## What Did Not Change During Review
+
+- app code
+- tests
 - SQLite schema
-- stored KPIs
+- repository contracts
 - import/export behavior
-- dashboard charts
-- new performance metrics
 - dashboard formulas
+- filter logic
 - trade delete
 - open trade creation
 - setup seeds
@@ -40,19 +53,19 @@ metrics can be filtered directly from the dashboard.
 
 ## Open Questions
 
-No blocking questions.
+No blocking questions for Slice 14.
 
 Non-blocking:
 
-- The existing filter controls remain in `presentation/trades`. Reuse was kept
-  as-is for this small slice because the controls already represent the central
-  trade filter state and no new shared abstraction was needed.
+- The existing filter controls remain in `presentation/trades`. This is
+  acceptable for Slice 14 because no new shared abstraction was needed.
 - Setup seeds and setup selection remain unresolved and out of scope.
 - Exact UI color tokens remain unresolved and out of scope.
 
 ## Verification
 
-Completed:
+No verification command was run during review. Slice 14 verification was already
+run during execute:
 
 - `flutter pub get` passed
 - `dart format .` passed, 0 files changed
@@ -67,9 +80,9 @@ feat: show dashboard filter controls
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-The implementation is complete, scoped, and verified. Review should confirm the
-shared filter flow before the next task is defined.
+Slice 14 is complete and reviewed. The next slice should be defined explicitly
+before implementation starts.
