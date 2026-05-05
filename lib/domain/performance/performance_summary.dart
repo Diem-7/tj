@@ -10,6 +10,7 @@ class PerformanceSummary {
     required this.bestTrade,
     required this.worstTrade,
     required this.sessionSummaries,
+    required this.equityPoints,
   });
 
   final double netPnl;
@@ -20,9 +21,11 @@ class PerformanceSummary {
   final Trade? bestTrade;
   final Trade? worstTrade;
   final List<SessionPerformanceSummary> sessionSummaries;
+  final List<double> equityPoints;
 
   factory PerformanceSummary.fromTrades(List<Trade> trades) {
-    final includedTrades = trades.where(_hasPerformanceValue).toList();
+    final includedTrades = trades.where(_hasPerformanceValue).toList()
+      ..sort((a, b) => a.closedAt!.compareTo(b.closedAt!));
     final tradeCount = includedTrades.length;
 
     if (tradeCount == 0) {
@@ -35,6 +38,7 @@ class PerformanceSummary {
         bestTrade: null,
         worstTrade: null,
         sessionSummaries: [],
+        equityPoints: [],
       );
     }
 
@@ -47,10 +51,12 @@ class PerformanceSummary {
     var rCount = 0;
     var bestTrade = includedTrades.first;
     var worstTrade = includedTrades.first;
+    final equityPoints = <double>[];
 
     for (final trade in includedTrades) {
       final pnl = trade.netPnl!;
       netPnl += pnl;
+      equityPoints.add(netPnl);
       sessionTotals
           .putIfAbsent(
             trade.session,
@@ -90,6 +96,7 @@ class PerformanceSummary {
       sessionSummaries: sessionTotals.values
           .map((builder) => builder.build())
           .toList(),
+      equityPoints: List.unmodifiable(equityPoints),
     );
   }
 
@@ -103,11 +110,13 @@ class SessionPerformanceSummary {
     required this.session,
     required this.netPnl,
     required this.tradeCount,
+    required this.equityPoints,
   });
 
   final TradeSession? session;
   final double netPnl;
   final int tradeCount;
+  final List<double> equityPoints;
 }
 
 class SessionPerformanceSummaryBuilder {
@@ -116,10 +125,12 @@ class SessionPerformanceSummaryBuilder {
   final TradeSession? session;
   var netPnl = 0.0;
   var tradeCount = 0;
+  final equityPoints = <double>[];
 
   void add(double pnl) {
     netPnl += pnl;
     tradeCount++;
+    equityPoints.add(netPnl);
   }
 
   SessionPerformanceSummary build() {
@@ -127,6 +138,7 @@ class SessionPerformanceSummaryBuilder {
       session: session,
       netPnl: netPnl,
       tradeCount: tradeCount,
+      equityPoints: List.unmodifiable(equityPoints),
     );
   }
 }

@@ -2,43 +2,39 @@
 
 ## Recommended Next Mode
 
-`define_task`
+`review_task`
 
 ## Reason
 
-Slice 16 is implemented, verified, and reviewed with no findings. The next
-slice should be defined explicitly before more code changes begin.
+Slice 17 has been implemented and should be reviewed after verification. The
+review should focus on layout stability, real curve data, and keeping the slice
+inside the dashboard-only boundary.
 
-## Suggested Next Definition Scope
+## Review Scope
 
-Recommended next slice:
+Review:
 
-- define the next smallest dashboard, filter, export/import, or trade workflow
-  improvement from the binding docs
-- keep trade delete out of scope unless explicitly selected
-- keep open trade creation out of scope unless explicitly selected
-- keep setup selection out of scope until setup seeds are confirmed
-- keep dashboard equity curve out of scope unless explicitly selected
-- keep auto-PnL calculation or suggestion out of scope
-- keep schema changes and import/export format changes out of scope unless
-  selected as the next slice
+- dashboard spacing and hierarchy
+- fixed card heights and responsive stacking
+- absence of fragile dashboard grids
+- reduced glow and clearer borders
+- real cumulative `netPnl` curve data
+- unchanged Data -> Domain -> Presentation flow
+- file length rule
 
-## Do Not Implement Yet
+## Do Not Add During Review
 
-- trade delete
-- open trade creation
-- auto-PnL calculation or suggestion
-- setup selection
-- setup management
-- dashboard equity curve
+- new features
 - schema changes
-- import/export format changes
-- recommendations, judging, optimization, or trading decisions
+- import/export changes
+- trade workflow changes
+- setup selection
+- recommendations, judgement, optimization, or automation
 
-## Verification Already Run
+## Verification
 
-For Slice 16:
+Completed for Slice 17:
 
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+- `dart format .` passed
+- `flutter analyze` passed, no issues found
+- `flutter test` passed, 42 tests

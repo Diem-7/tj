@@ -1,19 +1,20 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DashboardColors {
-  static const backgroundTop = Color(0xff071120);
-  static const backgroundBottom = Color(0xff020713);
-  static const panel = Color(0xcc0b1728);
-  static const panelStrong = Color(0xe6101d32);
-  static const border = Color(0xff1f4268);
-  static const text = Color(0xfff4f8ff);
-  static const mutedText = Color(0xff9aa8bd);
-  static const positive = Color(0xff22e39a);
-  static const negative = Color(0xffff4d57);
-  static const neutral = Color(0xff4ea1ff);
-  static const violet = Color(0xff8c5cff);
+  static const backgroundTop = Color(0xff02040a);
+  static const backgroundBottom = Color(0xff010205);
+  static const panel = Color(0x770a1322);
+  static const panelStrong = Color(0xaa0a1628);
+  static const border = Color(0x771f3755);
+  static const text = Color(0xffe2e8f0);
+  static const mutedText = Color(0xff64748b);
+  static const positive = Color(0xff338aff);
+  static const negative = Color(0xffef4444);
+  static const neutral = Color(0xff1e40af);
+  static const violet = Color(0xff8b5cf6);
 }
 
 class CockpitPanel extends StatelessWidget {
@@ -35,24 +36,26 @@ class CockpitPanel extends StatelessWidget {
     final accentColor = accent ?? DashboardColors.neutral;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(8),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: strong ? DashboardColors.panelStrong : DashboardColors.panel,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: DashboardColors.border),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: accentColor.withValues(alpha: strong ? 0.56 : 0.34),
+            ),
             boxShadow: [
               BoxShadow(
-                color: accentColor.withValues(alpha: strong ? 0.20 : 0.10),
-                blurRadius: strong ? 32 : 22,
-                offset: const Offset(0, 18),
+                color: accentColor.withValues(alpha: strong ? 0.12 : 0.06),
+                blurRadius: strong ? 18 : 12,
+                offset: const Offset(0, 10),
               ),
               const BoxShadow(
-                color: Color(0x66000000),
-                blurRadius: 28,
-                offset: Offset(0, 16),
+                color: Color(0x55000000),
+                blurRadius: 18,
+                offset: Offset(0, 10),
               ),
             ],
             gradient: LinearGradient(
@@ -61,7 +64,7 @@ class CockpitPanel extends StatelessWidget {
               colors: [
                 accentColor.withValues(alpha: strong ? 0.18 : 0.08),
                 const Color(0x00101d32),
-                const Color(0x33111d31),
+                const Color(0x22111d31),
               ],
             ),
           ),
@@ -91,17 +94,114 @@ class GlowIcon extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.18),
+        color: color.withValues(alpha: 0.10),
         boxShadow: [
           BoxShadow(
-            color: color.withValues(alpha: 0.22),
-            blurRadius: 28,
-            spreadRadius: 2,
+            color: color.withValues(alpha: 0.08),
+            blurRadius: 10,
+            spreadRadius: 0,
           ),
         ],
       ),
       child: Icon(icon, color: color, size: size * 0.48),
     );
+  }
+}
+
+class EquitySparkline extends StatelessWidget {
+  const EquitySparkline({
+    required this.points,
+    required this.color,
+    this.fill = true,
+    super.key,
+  });
+
+  final List<double> points;
+  final Color color;
+  final bool fill;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _EquitySparklinePainter(
+        points: points,
+        color: color,
+        fill: fill,
+      ),
+      child: const SizedBox.expand(),
+    );
+  }
+}
+
+class _EquitySparklinePainter extends CustomPainter {
+  const _EquitySparklinePainter({
+    required this.points,
+    required this.color,
+    required this.fill,
+  });
+
+  final List<double> points;
+  final Color color;
+  final bool fill;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (points.isEmpty || size.width <= 0 || size.height <= 0) {
+      return;
+    }
+
+    final minValue = points.reduce((a, b) => a < b ? a : b);
+    final maxValue = points.reduce((a, b) => a > b ? a : b);
+    final range = maxValue - minValue < 1 ? 1.0 : maxValue - minValue;
+    final step = points.length == 1 ? 0.0 : size.width / (points.length - 1);
+    final path = Path();
+
+    for (var index = 0; index < points.length; index++) {
+      final x = points.length == 1 ? size.width : index * step;
+      final y =
+          size.height - ((points[index] - minValue) / range * size.height);
+      if (index == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+
+    if (fill) {
+      final fillPath = Path.from(path)
+        ..lineTo(size.width, size.height)
+        ..lineTo(0, size.height)
+        ..close();
+      canvas.drawPath(
+        fillPath,
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              color.withValues(alpha: 0.26),
+              color.withValues(alpha: 0.02),
+            ],
+          ).createShader(Offset.zero & size),
+      );
+    }
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.2
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_EquitySparklinePainter oldDelegate) {
+    return oldDelegate.points != points ||
+        oldDelegate.color != color ||
+        oldDelegate.fill != fill;
   }
 }
 
@@ -113,4 +213,39 @@ Color performanceColor(double value) {
     return DashboardColors.negative;
   }
   return DashboardColors.neutral;
+}
+
+class AppTheme {
+  static ThemeData get darkTheme {
+    final baseTheme = ThemeData.dark();
+    return ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xff338aff),
+        brightness: Brightness.dark,
+      ),
+      scaffoldBackgroundColor: DashboardColors.backgroundBottom,
+      textTheme: GoogleFonts.interTextTheme(baseTheme.textTheme).apply(
+        bodyColor: DashboardColors.text,
+        displayColor: DashboardColors.text,
+      ),
+      cardTheme: CardThemeData(
+        color: DashboardColors.panel,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: DashboardColors.border),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: DashboardColors.panelStrong,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: DashboardColors.border),
+        ),
+      ),
+      useMaterial3: true,
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../domain/performance/performance_summary.dart';
@@ -18,8 +20,10 @@ class SessionBreakdown extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final maxPnl = cards.fold<double>(0, (prev, s) => math.max(prev, s.netPnl));
+
     return CockpitPanel(
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -31,24 +35,48 @@ class SessionBreakdown extends StatelessWidget {
                 'Session Performance',
                 style: TextStyle(
                   color: DashboardColors.text,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           LayoutBuilder(
             builder: (context, constraints) {
-              final columns = constraints.maxWidth >= 900 ? 3 : 1;
-              return GridView.count(
-                crossAxisCount: columns,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 18,
-                mainAxisSpacing: 18,
-                childAspectRatio: columns == 1 ? 3.3 : 2.05,
-                children: cards.map(_SessionCard.new).toList(),
+              if (constraints.maxWidth >= 900) {
+                return SizedBox(
+                  height: 166,
+                  child: Row(
+                    children: [
+                      for (var index = 0; index < cards.length; index++) ...[
+                        Expanded(
+                          child: _SessionCard(
+                            cards[index],
+                            isTop: cards[index].netPnl == maxPnl && maxPnl > 0,
+                          ),
+                        ),
+                        if (index != cards.length - 1)
+                          const SizedBox(width: 12),
+                      ],
+                    ],
+                  ),
+                );
+              }
+
+              return Column(
+                children: [
+                  for (var index = 0; index < cards.length; index++) ...[
+                    SizedBox(
+                      height: 132,
+                      child: _SessionCard(
+                        cards[index],
+                        isTop: cards[index].netPnl == maxPnl && maxPnl > 0,
+                      ),
+                    ),
+                    if (index != cards.length - 1) const SizedBox(height: 10),
+                  ],
+                ],
               );
             },
           ),
@@ -69,6 +97,7 @@ class SessionBreakdown extends StatelessWidget {
               session: session,
               netPnl: 0,
               tradeCount: 0,
+              equityPoints: const [],
             ),
       if (bySession.containsKey(null)) bySession[null]!,
     ];
@@ -76,9 +105,10 @@ class SessionBreakdown extends StatelessWidget {
 }
 
 class _SessionCard extends StatelessWidget {
-  const _SessionCard(this.summary);
+  const _SessionCard(this.summary, {this.isTop = false});
 
   final SessionPerformanceSummary summary;
+  final bool isTop;
 
   @override
   Widget build(BuildContext context) {
@@ -86,24 +116,20 @@ class _SessionCard extends StatelessWidget {
 
     return CockpitPanel(
       accent: color,
-      padding: const EdgeInsets.all(20),
+      strong: isTop,
+      padding: const EdgeInsets.all(16),
       child: Stack(
         children: [
           Positioned(
-            right: 4,
-            bottom: -16,
-            child: Container(
-              width: 150,
-              height: 4,
-              decoration: BoxDecoration(
+            left: 8,
+            right: 8,
+            bottom: 4,
+            height: 44,
+            child: IgnorePointer(
+              child: EquitySparkline(
+                points: summary.equityPoints,
                 color: color,
-                borderRadius: BorderRadius.circular(4),
-                boxShadow: [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.42),
-                    blurRadius: 18,
-                  ),
-                ],
+                fill: false,
               ),
             ),
           ),
@@ -112,9 +138,9 @@ class _SessionCard extends StatelessWidget {
               GlowIcon(
                 icon: _sessionIcon(summary.session),
                 color: color,
-                size: 64,
+                size: 54,
               ),
-              const SizedBox(width: 22),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,11 +151,11 @@ class _SessionCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: DashboardColors.text,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
@@ -137,12 +163,12 @@ class _SessionCard extends StatelessWidget {
                         signedMoney(summary.netPnl),
                         style: TextStyle(
                           color: color,
-                          fontSize: 32,
+                          fontSize: 30,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     Text(
                       '${summary.tradeCount} Trades',
                       style: const TextStyle(

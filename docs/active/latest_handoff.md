@@ -2,71 +2,52 @@
 
 ## Summary
 
-Slice 16 was reviewed with no findings. The dashboard UI overhaul keeps the
-existing data flow and calculations intact while adding the intended premium
-trading cockpit hierarchy: `Netto PnL` hero, compact KPIs, best/worst context,
-and prominent session performance.
+Slice 17 was implemented. The dashboard layout was tightened and made more
+stable without changing the app's product boundary or data flow.
 
-## Files Changed
+Hero, KPI, best/worst, and session areas now use tighter spacing and more
+stable dimensions. Dashboard glow was reduced and borders are clearer. The
+previous decorative chart marks were replaced with real cumulative `netPnl`
+sparkline data derived from filtered closed trades.
 
-- `docs/active/current_task.md`
-- `docs/active/next_step.md`
-- `docs/active/latest_handoff.md`
+## What Changed
 
-## Code Reviewed
+- Dashboard content spacing and header scale were tightened.
+- Hero and KPI areas now align more tightly on desktop.
+- KPI layout no longer uses `GridView.count`; it uses fixed-height responsive
+  rows/columns.
+- Session layout no longer uses `GridView.count`; it uses fixed-height
+  responsive rows/columns.
+- Best/worst panel has a fixed height and denser spacing.
+- Shared dashboard panels have reduced blur, glow, and shadow softness.
+- `PerformanceSummary` now exposes cumulative `equityPoints`.
+- `SessionPerformanceSummary` now exposes cumulative `equityPoints`.
+- Hero and session sparklines render from those real summary points.
 
-- `lib/main.dart`
-- `lib/presentation/app_home.dart`
-- `lib/presentation/dashboard/dashboard_screen.dart`
-- `lib/presentation/dashboard/dashboard_cards.dart`
-- `lib/presentation/dashboard/dashboard_best_worst.dart`
-- `lib/presentation/dashboard/dashboard_formatting.dart`
-- `lib/presentation/dashboard/dashboard_style.dart`
-- `lib/presentation/dashboard/session_breakdown.dart`
+## What Did Not Change
 
-## Review Findings
-
-No findings.
-
-## Review Notes
-
-- Dashboard hierarchy now matches the Slice 16 goal.
-- `Netto PnL` is the clear visual focus.
-- KPI cards are secondary and compact.
-- Best/worst and session sections are presentation-only.
-- Missing standard sessions are shown as zero-value UI cards only.
-- Existing providers, filters, and domain calculations remain unchanged.
-- No SQL or business logic was added to UI code.
-- All changed files remain under 300 lines.
-
-## What Did Not Change During Review
-
-- app code
-- tests
 - SQLite schema
 - repository contracts
-- domain calculations
 - provider flow
 - central filter logic
 - import/export behavior
-- trade creation, editing, or delete behavior
+- trade create/edit/delete behavior
 - setup selection or setup management
-- recommendations, judging, optimization, or automation
+- auto-PnL calculation
+- stored KPIs
+- recommendations, judgement, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 16.
+No blocking questions.
 
 Non-blocking:
 
 - Exact app-wide color tokens are still not globally approved.
-- Existing file `lib/presentation/trades/trade_form_dialog.dart` is over the
-  300-line target, but it was not changed in this slice.
 
 ## Verification
 
-No verification command was run during review. Slice 16 verification was already
-run during execute:
+Completed:
 
 - `dart format .` passed
 - `flutter analyze` passed, no issues found
@@ -75,14 +56,13 @@ run during execute:
 ## Suggested Commit Message
 
 ```text
-feat: overhaul dashboard cockpit UI
+feat: tighten dashboard layout responsiveness
 ```
 
 ## Recommended Next Mode
 
-`define_task`
+`review_task`
 
-## Reason
+## Why That Mode Is Recommended
 
-Slice 16 is complete and reviewed. The next slice should be defined explicitly
-before implementation starts.
+The slice is implemented and ready for verification plus review.

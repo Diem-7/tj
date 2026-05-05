@@ -27,7 +27,7 @@ class DashboardBestWorstPanel extends StatelessWidget {
     );
 
     return CockpitPanel(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 26),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: isCompact
           ? Column(
               children: [
@@ -36,12 +36,14 @@ class DashboardBestWorstPanel extends StatelessWidget {
                 worstTrade,
               ],
             )
-          : Row(
-              children: [
-                Expanded(child: bestTrade),
-                _Divider(isCompact: isCompact),
-                Expanded(child: worstTrade),
-              ],
+          : IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(child: bestTrade),
+                  _Divider(isCompact: isCompact),
+                  Expanded(child: worstTrade),
+                ],
+              ),
             ),
     );
   }
@@ -65,51 +67,59 @@ class _TradeHighlight extends StatelessWidget {
     final pnl = trade?.netPnl;
     final color = pnl == null ? fallbackColor : performanceColor(pnl);
 
-    return Row(
-      children: [
-        GlowIcon(icon: icon, color: color, size: 74),
-        const SizedBox(width: 24),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: DashboardColors.text,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 10),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  tradePnl(trade),
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          GlowIcon(icon: icon, color: color, size: 68),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: DashboardColors.text,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                tradeDetail(trade) ?? 'Nicht verfuegbar',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: DashboardColors.mutedText,
-                  fontSize: 14,
+                const SizedBox(height: 6),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    tradePnl(trade),
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 36,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 4),
+                Text(
+                  tradeDetail(trade) ?? 'Nicht verfuegbar',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: DashboardColors.mutedText,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -125,8 +135,8 @@ class _Divider extends StatelessWidget {
       width: isCompact ? double.infinity : 1,
       height: isCompact ? 1 : 82,
       margin: isCompact
-          ? const EdgeInsets.symmetric(vertical: 22)
-          : const EdgeInsets.symmetric(horizontal: 24),
+          ? const EdgeInsets.symmetric(vertical: 10)
+          : const EdgeInsets.symmetric(horizontal: 20),
       color: DashboardColors.border,
     );
   }

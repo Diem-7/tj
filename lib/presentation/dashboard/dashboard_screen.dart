@@ -31,18 +31,24 @@ class DashboardScreen extends ConsumerWidget {
           ),
         ),
         child: SafeArea(
-          child: summary.when(
-            data: (value) => Column(
-              children: [
-                _DashboardHeader(
-                  onRefresh: () => ref.invalidate(performanceSummaryProvider),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1320),
+              child: summary.when(
+                data: (value) => Column(
+                  children: [
+                    _DashboardHeader(
+                      onRefresh: () =>
+                          ref.invalidate(performanceSummaryProvider),
+                    ),
+                    const TradeFilterControls(),
+                    Expanded(child: _DashboardContent(summary: value)),
+                  ],
                 ),
-                const TradeFilterControls(),
-                Expanded(child: _DashboardContent(summary: value)),
-              ],
+                error: (error, stackTrace) => Center(child: Text('$error')),
+                loading: () => const Center(child: CircularProgressIndicator()),
+              ),
             ),
-            error: (error, stackTrace) => Center(child: Text('$error')),
-            loading: () => const Center(child: CircularProgressIndicator()),
           ),
         ),
       ),
@@ -58,7 +64,7 @@ class _DashboardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
       child: Row(
         children: [
           const Expanded(
@@ -69,7 +75,7 @@ class _DashboardHeader extends StatelessWidget {
                   'Dashboard',
                   style: TextStyle(
                     color: DashboardColors.text,
-                    fontSize: 34,
+                    fontSize: 30,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -119,7 +125,7 @@ class _DashboardContent extends StatelessWidget {
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 960;
         return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 22),
           child: Column(
             children: [
               if (isWide)
@@ -127,12 +133,12 @@ class _DashboardContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 5,
+                      flex: 14,
                       child: DashboardHeroCard(summary: summary),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      flex: 6,
+                      flex: 10,
                       child: DashboardKpiGrid(summary: summary),
                     ),
                   ],
@@ -142,10 +148,10 @@ class _DashboardContent extends StatelessWidget {
                 const SizedBox(height: 16),
                 DashboardKpiGrid(summary: summary),
               ],
-              const SizedBox(height: 18),
-              DashboardBestWorstPanel(summary: summary),
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
               SessionBreakdown(summaries: summary.sessionSummaries),
+              const SizedBox(height: 16),
+              DashboardBestWorstPanel(summary: summary),
             ],
           ),
         );
