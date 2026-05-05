@@ -2,76 +2,66 @@
 
 ## Mode
 
-`review_task`
+`execute_task`
 
 ## Task
 
-Review Slice 13: minimal edit UI for existing trades.
+Execute Slice 14: dashboard filter visibility.
 
 ## Goal
 
-Review the implemented trade edit flow before defining the next slice.
+Make the dashboard's filtered performance context visible and directly
+controllable from the dashboard, using the already existing central trade
+filter state.
 
-## Review Result
+## Implementation
 
-No findings.
+The dashboard now renders the existing `TradeFilterControls` above the
+performance content.
 
-## Reviewed Scope
+## Scope Completed
 
-- `lib/presentation/trades/trade_create_dialog.dart`
-- `lib/presentation/trades/trade_edit_action.dart`
-- `lib/presentation/trades/trade_form_dialog.dart`
-- `lib/presentation/trades/trade_form_formatting.dart`
-- `lib/presentation/trades/trade_form_input.dart`
-- `lib/presentation/trades/trades_screen.dart`
-- `test/trade_repository_test.dart`
-- active handoff documentation
+- Exposed the existing filter controls on the dashboard.
+- Kept one shared filter state for trades and dashboard.
+- Kept dashboard metrics based on `performanceSummaryProvider`.
+- Kept filter behavior based on closed trades and `closed_at`.
+- Kept UI text in German.
 
-## Review Notes
+## What Did Not Change
 
-- Trade creation still routes through `TradeRepository.create`.
-- Trade editing routes through `TradeRepository.update`.
-- The edit dialog is prefilled from the selected trade.
-- The edit action invalidates trade and performance providers after save.
-- `net_pnl` remains manual input and is not inferred from prices.
-- No SQL was added to UI code.
-- No performance KPI calculation was added to UI code.
-- No delete behavior was added.
-- No setup selection or setup management was added.
-- No SQLite schema or import/export format changed.
-- No file exceeds 300 lines.
-
-## What Did Not Change During Review
-
-- app code
-- tests
-- SQLite schema
-- repository contracts
-- import/export behavior
+- filter logic
+- stored KPIs
+- SQL usage
+- dashboard charts
+- performance metrics
 - dashboard formulas
+- SQLite schema
+- import/export behavior
 - trade delete
 - open trade creation
-- auto-PnL calculation or suggestion
-- setup seeds
 - setup selection
-- setup management UI
+- setup management
+- setup seeds
+- auto-PnL calculation or suggestion
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 13.
+No blocking questions.
 
 Non-blocking:
 
+- The existing filter controls remain in `presentation/trades`. Reuse was kept
+  as-is for this small slice because the controls already represent the central
+  trade filter state and no new shared abstraction was needed.
 - Setup seeds and setup selection remain unresolved and out of scope.
-- Exact UI color tokens remain unresolved and were not needed for this slice.
+- Exact UI color tokens remain unresolved and out of scope.
 
 ## Verification
 
-No verification command was run during review. Slice 13 verification was already
-run during execute:
+Completed:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed, 0 files changed
 - `flutter analyze` passed, no issues found
 - `flutter test` passed, 40 tests

@@ -2,90 +2,74 @@
 
 ## Summary
 
-Slice 13 was reviewed with no findings. Existing trades now expose an edit
-action in the trade list, open a prefilled dialog, and save manual changes
-through `TradeRepository.update`.
+Slice 14 was implemented. The dashboard now exposes the existing central trade
+filter controls above the performance content, so the displayed dashboard
+metrics can be filtered directly from the dashboard.
 
 ## Files Changed
 
+- `lib/presentation/dashboard/dashboard_screen.dart`
 - `docs/active/current_task.md`
 - `docs/active/next_step.md`
 - `docs/active/latest_handoff.md`
 
-## Code Reviewed
+## What Changed
 
-- `lib/presentation/trades/trade_create_dialog.dart`
-- `lib/presentation/trades/trade_edit_action.dart`
-- `lib/presentation/trades/trade_form_dialog.dart`
-- `lib/presentation/trades/trade_form_formatting.dart`
-- `lib/presentation/trades/trade_form_input.dart`
-- `lib/presentation/trades/trades_screen.dart`
-- `test/trade_repository_test.dart`
+- Added `TradeFilterControls` to the dashboard body.
+- Kept dashboard metric content in the same `performanceSummaryProvider` flow.
+- Updated active task and handoff documents for execute mode.
 
-## Review Findings
+## What Did Not Change
 
-No findings.
-
-## Review Notes
-
-- Trade creation still routes through `TradeRepository.create`.
-- Trade editing routes through `TradeRepository.update`.
-- The edit dialog is prefilled from the selected trade.
-- The edit action invalidates trade and performance providers after save.
-- `net_pnl` remains manual input and is not inferred from prices.
-- No SQL was added to UI code.
-- No performance KPI calculation was added to UI code.
-- No delete behavior was added.
-- No setup selection or setup management was added.
-- No SQLite schema or import/export format changed.
-- No file exceeds 300 lines.
-
-## What Did Not Change During Review
-
-- app code
-- tests
-- SQLite schema
+- filter logic
+- domain calculations
 - repository contracts
+- SQLite schema
+- stored KPIs
 - import/export behavior
+- dashboard charts
+- new performance metrics
 - dashboard formulas
 - trade delete
 - open trade creation
-- auto-PnL calculation or suggestion
 - setup seeds
 - setup selection
 - setup management UI
+- auto-PnL calculation or suggestion
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 13.
+No blocking questions.
 
 Non-blocking:
 
+- The existing filter controls remain in `presentation/trades`. Reuse was kept
+  as-is for this small slice because the controls already represent the central
+  trade filter state and no new shared abstraction was needed.
 - Setup seeds and setup selection remain unresolved and out of scope.
-- Exact UI color tokens remain unresolved and were not needed for this slice.
+- Exact UI color tokens remain unresolved and out of scope.
 
 ## Verification
 
-No verification command was run during review. Slice 13 verification was already
-run during execute:
+Completed:
 
 - `flutter pub get` passed
-- `dart format .` passed
+- `dart format .` passed, 0 files changed
 - `flutter analyze` passed, no issues found
 - `flutter test` passed, 40 tests
 
 ## Suggested Commit Message
 
 ```text
-feat: add minimal trade edit flow
+feat: show dashboard filter controls
 ```
 
 ## Recommended Next Mode
 
-`define_task`
+`review_task`
 
 ## Reason
 
-Slice 13 is complete and reviewed. The next slice should be defined explicitly
-before implementation starts.
+The implementation is complete, scoped, and verified. Review should confirm the
+shared filter flow before the next task is defined.

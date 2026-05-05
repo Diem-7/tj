@@ -5,6 +5,7 @@ import '../../domain/performance/performance_summary.dart';
 import '../../domain/trades/trade.dart';
 import '../export/export_action.dart';
 import '../import/import_button.dart';
+import '../trades/trade_filter_controls.dart';
 import '../trades/trade_labels.dart';
 import '../trades/trade_providers.dart';
 
@@ -29,7 +30,12 @@ class DashboardScreen extends ConsumerWidget {
         ],
       ),
       body: summary.when(
-        data: (value) => _DashboardContent(summary: value),
+        data: (value) => Column(
+          children: [
+            const TradeFilterControls(),
+            Expanded(child: _DashboardContent(summary: value)),
+          ],
+        ),
         error: (error, stackTrace) => Center(child: Text('$error')),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),

@@ -2,42 +2,48 @@
 
 ## Recommended Next Mode
 
-`define_task`
+`review_task`
 
 ## Reason
 
-Slice 13 is implemented, verified, and reviewed with no findings. The next
-slice should be defined before more code changes begin.
+Slice 14 has been implemented and verified in a small UI-only slice. It should
+be reviewed before the next task is defined.
 
-## Suggested Next Definition Scope
+## Suggested Review Scope
 
-Recommended next slice:
+- `lib/presentation/dashboard/dashboard_screen.dart`
+- `docs/active/current_task.md`
+- `docs/active/next_step.md`
+- `docs/active/latest_handoff.md`
 
-- define the next smallest trade workflow improvement from the binding docs
-- keep trade delete out of scope unless explicitly selected
-- keep open trade creation out of scope unless explicitly selected
-- keep setup selection out of scope until setup seeds are confirmed
-- keep auto-PnL calculation or suggestion out of scope
-- keep dashboard charts, schema changes, and import/export format changes out of
-  scope unless selected as the next slice
+## Review Focus
 
-## Do Not Implement Yet
-
-- trade delete
-- open trade creation
-- auto-PnL calculation or suggestion
-- setup selection
-- setup management
-- dashboard charts
-- schema changes
-- import/export format changes
-- recommendations, judging, optimization, or trading decisions
+- Dashboard filter controls are visible without duplicating filter logic.
+- Dashboard and trade list still share `tradeFilterProvider`.
+- Performance summary still flows through `performanceSummaryProvider`.
+- Closed-trade and `closed_at` filter rules remain unchanged.
+- No dashboard charts, new KPIs, schema changes, or trade workflow changes were
+  added.
+- No file exceeds 300 lines.
 
 ## Verification Already Run
 
-For Slice 13:
+- `flutter pub get` passed
+- `dart format .` passed, 0 files changed
+- `flutter analyze` passed, no issues found
+- `flutter test` passed, 40 tests
 
-- `flutter pub get`
-- `dart format .`
-- `flutter analyze`
-- `flutter test`
+## Keep Out Of Scope
+
+- dashboard charts
+- new performance metrics
+- new dashboard formulas
+- trade delete
+- open trade creation
+- setup selection
+- setup management
+- setup seeds
+- schema changes
+- import/export changes
+- auto-PnL calculation or suggestion
+- recommendations, judging, optimization, or trading decisions
