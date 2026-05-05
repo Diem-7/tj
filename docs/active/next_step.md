@@ -2,39 +2,44 @@
 
 ## Recommended Next Mode
 
-`review_task`
+`define_task`
 
 ## Reason
 
-Slice 17 has been implemented and should be reviewed after verification. The
-review should focus on layout stability, real curve data, and keeping the slice
-inside the dashboard-only boundary.
+Slice 17 has been implemented, verified, and reviewed with no findings. The
+next slice should be defined explicitly before more code changes begin.
 
-## Review Scope
+## Suggested Next Definition Scope
 
-Review:
+Recommended next slice:
 
-- dashboard spacing and hierarchy
-- fixed card heights and responsive stacking
-- absence of fragile dashboard grids
-- reduced glow and clearer borders
-- real cumulative `netPnl` curve data
-- unchanged Data -> Domain -> Presentation flow
-- file length rule
+- define the next smallest dashboard, filter, trade workflow, import/export, or
+  cleanup improvement from the binding docs
+- keep the current dashboard direction intact
+- keep trade delete out of scope unless explicitly selected
+- keep setup selection out of scope until setup seeds are confirmed
+- keep schema changes and import/export format changes out of scope unless
+  selected as the next slice
 
-## Do Not Add During Review
+Possible small cleanup candidates:
 
-- new features
-- schema changes
-- import/export changes
-- trade workflow changes
+- add direct tests for `equityPoints`
+- split `trade_form_dialog.dart` below the 300-line target
+- define app-wide color tokens
+
+## Do Not Implement Yet
+
+- trade delete
 - setup selection
-- recommendations, judgement, optimization, or automation
+- setup management
+- schema changes
+- import/export format changes
+- auto-PnL calculation
+- recommendations, judgement, optimization, or trading decisions
 
-## Verification
+## Verification Already Run
 
-Completed for Slice 17:
+For the reviewed state:
 
-- `dart format .` passed
-- `flutter analyze` passed, no issues found
-- `flutter test` passed, 42 tests
+- `flutter analyze`
+- `flutter test`
