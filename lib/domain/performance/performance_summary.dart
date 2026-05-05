@@ -9,6 +9,7 @@ class PerformanceSummary {
     required this.tradeCount,
     required this.bestTrade,
     required this.worstTrade,
+    required this.sessionSummaries,
   });
 
   final double netPnl;
@@ -18,6 +19,7 @@ class PerformanceSummary {
   final int tradeCount;
   final Trade? bestTrade;
   final Trade? worstTrade;
+  final List<SessionPerformanceSummary> sessionSummaries;
 
   factory PerformanceSummary.fromTrades(List<Trade> trades) {
     final includedTrades = trades.where(_hasPerformanceValue).toList();
@@ -32,9 +34,11 @@ class PerformanceSummary {
         tradeCount: 0,
         bestTrade: null,
         worstTrade: null,
+        sessionSummaries: [],
       );
     }
 
+    final sessionTotals = <TradeSession?, SessionPerformanceSummaryBuilder>{};
     var netPnl = 0.0;
     var wins = 0;
     var grossProfit = 0.0;
@@ -47,6 +51,12 @@ class PerformanceSummary {
     for (final trade in includedTrades) {
       final pnl = trade.netPnl!;
       netPnl += pnl;
+      sessionTotals
+          .putIfAbsent(
+            trade.session,
+            () => SessionPerformanceSummaryBuilder(trade.session),
+          )
+          .add(pnl);
 
       if (pnl > 0) {
         wins++;
@@ -77,10 +87,46 @@ class PerformanceSummary {
       tradeCount: tradeCount,
       bestTrade: bestTrade,
       worstTrade: worstTrade,
+      sessionSummaries: sessionTotals.values
+          .map((builder) => builder.build())
+          .toList(),
     );
   }
 
   static bool _hasPerformanceValue(Trade trade) {
     return trade.isClosed && trade.netPnl != null;
+  }
+}
+
+class SessionPerformanceSummary {
+  const SessionPerformanceSummary({
+    required this.session,
+    required this.netPnl,
+    required this.tradeCount,
+  });
+
+  final TradeSession? session;
+  final double netPnl;
+  final int tradeCount;
+}
+
+class SessionPerformanceSummaryBuilder {
+  SessionPerformanceSummaryBuilder(this.session);
+
+  final TradeSession? session;
+  var netPnl = 0.0;
+  var tradeCount = 0;
+
+  void add(double pnl) {
+    netPnl += pnl;
+    tradeCount++;
+  }
+
+  SessionPerformanceSummary build() {
+    return SessionPerformanceSummary(
+      session: session,
+      netPnl: netPnl,
+      tradeCount: tradeCount,
+    );
   }
 }

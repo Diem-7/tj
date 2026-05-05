@@ -13,6 +13,7 @@ void main() {
     expect(summary.tradeCount, 0);
     expect(summary.bestTrade, isNull);
     expect(summary.worstTrade, isNull);
+    expect(summary.sessionSummaries, isEmpty);
   });
 
   test('calculates mixed performance values from closed trades', () {
@@ -31,6 +32,50 @@ void main() {
     expect(summary.tradeCount, 3);
     expect(summary.bestTrade?.id, 'win');
     expect(summary.worstTrade?.id, 'loss');
+  });
+
+  test('groups session performance from included trades', () {
+    final summary = PerformanceSummary.fromTrades([
+      _trade(id: 'asia-win', netPnl: 300, session: TradeSession.asia),
+      _trade(id: 'asia-loss', netPnl: -100, session: TradeSession.asia),
+      _trade(id: 'london-win', netPnl: 50, session: TradeSession.london),
+      _trade(id: 'no-session', netPnl: -25, session: null),
+    ]);
+
+    final asia = _sessionSummary(summary, TradeSession.asia);
+    final london = _sessionSummary(summary, TradeSession.london);
+    final noSession = _sessionSummary(summary, null);
+
+    expect(asia.netPnl, 200);
+    expect(asia.tradeCount, 2);
+    expect(london.netPnl, 50);
+    expect(london.tradeCount, 1);
+    expect(noSession.netPnl, -25);
+    expect(noSession.tradeCount, 1);
+  });
+
+  test('excludes trades without performance value from session groups', () {
+    final summary = PerformanceSummary.fromTrades([
+      _trade(id: 'included', netPnl: 100, session: TradeSession.newYork),
+      _trade(
+        id: 'open',
+        netPnl: 500,
+        withoutClosedAt: true,
+        session: TradeSession.newYork,
+      ),
+      _trade(
+        id: 'partial',
+        netPnl: 500,
+        exitPrice: null,
+        session: TradeSession.newYork,
+      ),
+      _trade(id: 'missing-pnl', netPnl: null, session: TradeSession.london),
+    ]);
+
+    expect(summary.sessionSummaries, hasLength(1));
+    expect(summary.sessionSummaries.single.session, TradeSession.newYork);
+    expect(summary.sessionSummaries.single.netPnl, 100);
+    expect(summary.sessionSummaries.single.tradeCount, 1);
   });
 
   test('returns null profit factor without losses', () {
@@ -74,6 +119,7 @@ Trade _trade({
   DateTime? closedAt,
   bool withoutClosedAt = false,
   double? exitPrice = 101,
+  TradeSession? session = TradeSession.london,
 }) {
   return Trade(
     id: id,
@@ -91,10 +137,19 @@ Trade _trade({
     riskAmount: riskAmount,
     fees: null,
     netPnl: netPnl,
-    session: TradeSession.london,
+    session: session,
     rating: null,
     notes: null,
     createdAt: DateTime.utc(2026),
     updatedAt: DateTime.utc(2026),
+  );
+}
+
+SessionPerformanceSummary _sessionSummary(
+  PerformanceSummary summary,
+  TradeSession? session,
+) {
+  return summary.sessionSummaries.singleWhere(
+    (sessionSummary) => sessionSummary.session == session,
   );
 }

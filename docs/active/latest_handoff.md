@@ -2,9 +2,9 @@
 
 ## Summary
 
-Slice 14 was reviewed with no findings. The dashboard now exposes the existing
-central trade filter controls above the performance content, so dashboard
-metrics can be filtered directly from the dashboard.
+Slice 15 was reviewed with no findings. The dashboard now includes a compact
+session breakdown that shows `Netto PnL` and trade count per session from the
+existing filtered closed trades with `net_pnl`.
 
 ## Files Changed
 
@@ -14,7 +14,10 @@ metrics can be filtered directly from the dashboard.
 
 ## Code Reviewed
 
+- `lib/domain/performance/performance_summary.dart`
 - `lib/presentation/dashboard/dashboard_screen.dart`
+- `lib/presentation/dashboard/session_breakdown.dart`
+- `test/performance_summary_test.dart`
 
 ## Review Findings
 
@@ -22,16 +25,16 @@ No findings.
 
 ## Review Notes
 
-- The dashboard renders the existing `TradeFilterControls` above performance
-  content.
-- Dashboard metrics still flow through `performanceSummaryProvider`.
-- Dashboard and trade list still share the same central `tradeFilterProvider`.
-- No filter logic was duplicated in dashboard UI.
-- Closed-trade and `closed_at` filter rules remain in the domain filter.
+- Session performance is calculated in the domain layer.
+- Session performance uses closed trades with `net_pnl`.
+- Trades without `closed_at`, without `exit_price`, or without `net_pnl` are
+  excluded.
+- Trades without session are grouped as `Keine Session`.
+- Dashboard rendering still flows through `performanceSummaryProvider`.
+- The existing central `tradeFilterProvider` remains the only filter source.
 - No SQL was added to UI code.
-- No performance KPI calculation was added to UI code.
-- No dashboard charts, new KPIs, schema changes, or trade workflow changes were
-  added.
+- Existing dashboard KPI formulas remain unchanged.
+- Tests cover session grouping and exclusion rules.
 - No file exceeds 300 lines.
 
 ## What Did Not Change During Review
@@ -41,41 +44,40 @@ No findings.
 - SQLite schema
 - repository contracts
 - import/export behavior
-- dashboard formulas
-- filter logic
-- trade delete
-- open trade creation
+- central trade filter logic
+- existing dashboard KPI formulas
 - setup seeds
 - setup selection
 - setup management UI
+- trade delete
+- open trade creation
 - auto-PnL calculation or suggestion
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 14.
+No blocking questions for Slice 15.
 
 Non-blocking:
 
-- The existing filter controls remain in `presentation/trades`. This is
-  acceptable for Slice 14 because no new shared abstraction was needed.
+- Exact dashboard chart styling remains out of scope until color tokens are
+  approved.
 - Setup seeds and setup selection remain unresolved and out of scope.
-- Exact UI color tokens remain unresolved and out of scope.
 
 ## Verification
 
-No verification command was run during review. Slice 14 verification was already
+No verification command was run during review. Slice 15 verification was already
 run during execute:
 
 - `flutter pub get` passed
-- `dart format .` passed, 0 files changed
+- `dart format .` passed, 2 files changed
 - `flutter analyze` passed, no issues found
-- `flutter test` passed, 40 tests
+- `flutter test` passed, 42 tests
 
 ## Suggested Commit Message
 
 ```text
-feat: show dashboard filter controls
+feat: show dashboard session breakdown
 ```
 
 ## Recommended Next Mode
@@ -84,5 +86,5 @@ feat: show dashboard filter controls
 
 ## Reason
 
-Slice 14 is complete and reviewed. The next slice should be defined explicitly
+Slice 15 is complete and reviewed. The next slice should be defined explicitly
 before implementation starts.

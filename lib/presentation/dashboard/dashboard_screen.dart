@@ -8,6 +8,7 @@ import '../import/import_button.dart';
 import '../trades/trade_filter_controls.dart';
 import '../trades/trade_labels.dart';
 import '../trades/trade_providers.dart';
+import 'session_breakdown.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -59,49 +60,58 @@ class _DashboardContent extends StatelessWidget {
       );
     }
 
-    return GridView.count(
-      padding: const EdgeInsets.all(16),
-      crossAxisCount: _columnCount(MediaQuery.sizeOf(context).width),
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 1.45,
-      children: [
-        _MetricCard(
-          label: 'Netto PnL',
-          value: _signedMoney(summary.netPnl),
-          icon: Icons.account_balance_wallet_outlined,
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverGrid.count(
+            crossAxisCount: _columnCount(MediaQuery.sizeOf(context).width),
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.45,
+            children: [
+              _MetricCard(
+                label: 'Netto PnL',
+                value: _signedMoney(summary.netPnl),
+                icon: Icons.account_balance_wallet_outlined,
+              ),
+              _MetricCard(
+                label: 'Trefferquote',
+                value: _percent(summary.winrate),
+                icon: Icons.track_changes_outlined,
+              ),
+              _MetricCard(
+                label: 'Profit Factor',
+                value: _optionalNumber(summary.profitFactor),
+                icon: Icons.balance_outlined,
+              ),
+              _MetricCard(
+                label: 'Durchschnitt R',
+                value: _optionalNumber(summary.averageR),
+                icon: Icons.functions,
+              ),
+              _MetricCard(
+                label: 'Trades',
+                value: summary.tradeCount.toString(),
+                icon: Icons.receipt_long_outlined,
+              ),
+              _MetricCard(
+                label: 'Bester Trade',
+                value: _tradePnl(summary.bestTrade),
+                detail: _tradeDetail(summary.bestTrade),
+                icon: Icons.trending_up,
+              ),
+              _MetricCard(
+                label: 'Schlechtester Trade',
+                value: _tradePnl(summary.worstTrade),
+                detail: _tradeDetail(summary.worstTrade),
+                icon: Icons.trending_down,
+              ),
+            ],
+          ),
         ),
-        _MetricCard(
-          label: 'Trefferquote',
-          value: _percent(summary.winrate),
-          icon: Icons.track_changes_outlined,
-        ),
-        _MetricCard(
-          label: 'Profit Factor',
-          value: _optionalNumber(summary.profitFactor),
-          icon: Icons.balance_outlined,
-        ),
-        _MetricCard(
-          label: 'Durchschnitt R',
-          value: _optionalNumber(summary.averageR),
-          icon: Icons.functions,
-        ),
-        _MetricCard(
-          label: 'Trades',
-          value: summary.tradeCount.toString(),
-          icon: Icons.receipt_long_outlined,
-        ),
-        _MetricCard(
-          label: 'Bester Trade',
-          value: _tradePnl(summary.bestTrade),
-          detail: _tradeDetail(summary.bestTrade),
-          icon: Icons.trending_up,
-        ),
-        _MetricCard(
-          label: 'Schlechtester Trade',
-          value: _tradePnl(summary.worstTrade),
-          detail: _tradeDetail(summary.worstTrade),
-          icon: Icons.trending_down,
+        SliverToBoxAdapter(
+          child: SessionBreakdown(summaries: summary.sessionSummaries),
         ),
       ],
     );
