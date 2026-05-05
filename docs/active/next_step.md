@@ -6,7 +6,7 @@
 
 ## Reason
 
-Slice 15 is implemented, verified, and reviewed with no findings. The next
+Slice 16 is implemented, verified, and reviewed with no findings. The next
 slice should be defined explicitly before more code changes begin.
 
 ## Suggested Next Definition Scope
@@ -37,9 +37,8 @@ Recommended next slice:
 
 ## Verification Already Run
 
-For Slice 15:
+For Slice 16:
 
-- `flutter pub get`
 - `dart format .`
 - `flutter analyze`
 - `flutter test`

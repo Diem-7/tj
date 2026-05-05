@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/performance/performance_summary.dart';
-import '../../domain/trades/trade.dart';
 import '../export/export_action.dart';
 import '../import/import_button.dart';
 import '../trades/trade_filter_controls.dart';
-import '../trades/trade_labels.dart';
 import '../trades/trade_providers.dart';
+import 'dashboard_best_worst.dart';
+import 'dashboard_cards.dart';
+import 'dashboard_style.dart';
 import 'session_breakdown.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -18,27 +19,81 @@ class DashboardScreen extends ConsumerWidget {
     final summary = ref.watch(performanceSummaryProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        actions: [
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              DashboardColors.backgroundTop,
+              DashboardColors.backgroundBottom,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: summary.when(
+            data: (value) => Column(
+              children: [
+                _DashboardHeader(
+                  onRefresh: () => ref.invalidate(performanceSummaryProvider),
+                ),
+                const TradeFilterControls(),
+                Expanded(child: _DashboardContent(summary: value)),
+              ],
+            ),
+            error: (error, stackTrace) => Center(child: Text('$error')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DashboardHeader extends StatelessWidget {
+  const _DashboardHeader({required this.onRefresh});
+
+  final VoidCallback onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
+      child: Row(
+        children: [
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Dashboard',
+                  style: TextStyle(
+                    color: DashboardColors.text,
+                    fontSize: 34,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Dein Trading Cockpit im Ueberblick',
+                  style: TextStyle(
+                    color: DashboardColors.mutedText,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            ),
+          ),
           const ImportButton(),
+          const SizedBox(width: 8),
           const ExportAction(),
+          const SizedBox(width: 8),
           IconButton(
             tooltip: 'Aktualisieren',
-            onPressed: () => ref.invalidate(performanceSummaryProvider),
-            icon: const Icon(Icons.refresh),
+            onPressed: onRefresh,
+            icon: const Icon(Icons.refresh, color: DashboardColors.neutral),
           ),
         ],
-      ),
-      body: summary.when(
-        data: (value) => Column(
-          children: [
-            const TradeFilterControls(),
-            Expanded(child: _DashboardContent(summary: value)),
-          ],
-        ),
-        error: (error, stackTrace) => Center(child: Text('$error')),
-        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -60,161 +115,41 @@ class _DashboardContent extends StatelessWidget {
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-          sliver: SliverGrid.count(
-            crossAxisCount: _columnCount(MediaQuery.sizeOf(context).width),
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.45,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 960;
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
+          child: Column(
             children: [
-              _MetricCard(
-                label: 'Netto PnL',
-                value: _signedMoney(summary.netPnl),
-                icon: Icons.account_balance_wallet_outlined,
-              ),
-              _MetricCard(
-                label: 'Trefferquote',
-                value: _percent(summary.winrate),
-                icon: Icons.track_changes_outlined,
-              ),
-              _MetricCard(
-                label: 'Profit Factor',
-                value: _optionalNumber(summary.profitFactor),
-                icon: Icons.balance_outlined,
-              ),
-              _MetricCard(
-                label: 'Durchschnitt R',
-                value: _optionalNumber(summary.averageR),
-                icon: Icons.functions,
-              ),
-              _MetricCard(
-                label: 'Trades',
-                value: summary.tradeCount.toString(),
-                icon: Icons.receipt_long_outlined,
-              ),
-              _MetricCard(
-                label: 'Bester Trade',
-                value: _tradePnl(summary.bestTrade),
-                detail: _tradeDetail(summary.bestTrade),
-                icon: Icons.trending_up,
-              ),
-              _MetricCard(
-                label: 'Schlechtester Trade',
-                value: _tradePnl(summary.worstTrade),
-                detail: _tradeDetail(summary.worstTrade),
-                icon: Icons.trending_down,
-              ),
+              if (isWide)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: DashboardHeroCard(summary: summary),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      flex: 6,
+                      child: DashboardKpiGrid(summary: summary),
+                    ),
+                  ],
+                )
+              else ...[
+                DashboardHeroCard(summary: summary),
+                const SizedBox(height: 16),
+                DashboardKpiGrid(summary: summary),
+              ],
+              const SizedBox(height: 18),
+              DashboardBestWorstPanel(summary: summary),
+              const SizedBox(height: 18),
+              SessionBreakdown(summaries: summary.sessionSummaries),
             ],
           ),
-        ),
-        SliverToBoxAdapter(
-          child: SessionBreakdown(summaries: summary.sessionSummaries),
-        ),
-      ],
-    );
-  }
-
-  int _columnCount(double width) {
-    if (width >= 1000) {
-      return 4;
-    }
-    if (width >= 640) {
-      return 3;
-    }
-    return 2;
-  }
-
-  String _signedMoney(double value) {
-    final prefix = value > 0 ? '+' : '';
-    return '$prefix${value.toStringAsFixed(2)}';
-  }
-
-  String _percent(double value) {
-    return '${(value * 100).toStringAsFixed(1)}%';
-  }
-
-  String _optionalNumber(double? value) {
-    if (value == null) {
-      return 'Nicht verfuegbar';
-    }
-    return value.toStringAsFixed(2);
-  }
-
-  String _tradePnl(Trade? trade) {
-    final pnl = trade?.netPnl;
-    if (pnl == null) {
-      return 'Nicht verfuegbar';
-    }
-    return _signedMoney(pnl);
-  }
-
-  String? _tradeDetail(Trade? trade) {
-    if (trade == null) {
-      return null;
-    }
-    final session = trade.session?.label ?? 'Keine Session';
-    return '${trade.direction.label} - $session';
-  }
-}
-
-class _MetricCard extends StatelessWidget {
-  const _MetricCard({
-    required this.label,
-    required this.value,
-    required this.icon,
-    this.detail,
-  });
-
-  final String label;
-  final String value;
-  final IconData icon;
-  final String? detail;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.labelLarge,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            FittedBox(
-              alignment: Alignment.centerLeft,
-              fit: BoxFit.scaleDown,
-              child: Text(value, style: textTheme.headlineSmall),
-            ),
-            if (detail != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                detail!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.bodySmall,
-              ),
-            ],
-          ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

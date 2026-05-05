@@ -2,9 +2,10 @@
 
 ## Summary
 
-Slice 15 was reviewed with no findings. The dashboard now includes a compact
-session breakdown that shows `Netto PnL` and trade count per session from the
-existing filtered closed trades with `net_pnl`.
+Slice 16 was reviewed with no findings. The dashboard UI overhaul keeps the
+existing data flow and calculations intact while adding the intended premium
+trading cockpit hierarchy: `Netto PnL` hero, compact KPIs, best/worst context,
+and prominent session performance.
 
 ## Files Changed
 
@@ -14,10 +15,14 @@ existing filtered closed trades with `net_pnl`.
 
 ## Code Reviewed
 
-- `lib/domain/performance/performance_summary.dart`
+- `lib/main.dart`
+- `lib/presentation/app_home.dart`
 - `lib/presentation/dashboard/dashboard_screen.dart`
+- `lib/presentation/dashboard/dashboard_cards.dart`
+- `lib/presentation/dashboard/dashboard_best_worst.dart`
+- `lib/presentation/dashboard/dashboard_formatting.dart`
+- `lib/presentation/dashboard/dashboard_style.dart`
 - `lib/presentation/dashboard/session_breakdown.dart`
-- `test/performance_summary_test.dart`
 
 ## Review Findings
 
@@ -25,17 +30,14 @@ No findings.
 
 ## Review Notes
 
-- Session performance is calculated in the domain layer.
-- Session performance uses closed trades with `net_pnl`.
-- Trades without `closed_at`, without `exit_price`, or without `net_pnl` are
-  excluded.
-- Trades without session are grouped as `Keine Session`.
-- Dashboard rendering still flows through `performanceSummaryProvider`.
-- The existing central `tradeFilterProvider` remains the only filter source.
-- No SQL was added to UI code.
-- Existing dashboard KPI formulas remain unchanged.
-- Tests cover session grouping and exclusion rules.
-- No file exceeds 300 lines.
+- Dashboard hierarchy now matches the Slice 16 goal.
+- `Netto PnL` is the clear visual focus.
+- KPI cards are secondary and compact.
+- Best/worst and session sections are presentation-only.
+- Missing standard sessions are shown as zero-value UI cards only.
+- Existing providers, filters, and domain calculations remain unchanged.
+- No SQL or business logic was added to UI code.
+- All changed files remain under 300 lines.
 
 ## What Did Not Change During Review
 
@@ -43,41 +45,37 @@ No findings.
 - tests
 - SQLite schema
 - repository contracts
+- domain calculations
+- provider flow
+- central filter logic
 - import/export behavior
-- central trade filter logic
-- existing dashboard KPI formulas
-- setup seeds
-- setup selection
-- setup management UI
-- trade delete
-- open trade creation
-- auto-PnL calculation or suggestion
+- trade creation, editing, or delete behavior
+- setup selection or setup management
 - recommendations, judging, optimization, or automation
 
 ## Open Questions
 
-No blocking questions for Slice 15.
+No blocking questions for Slice 16.
 
 Non-blocking:
 
-- Exact dashboard chart styling remains out of scope until color tokens are
-  approved.
-- Setup seeds and setup selection remain unresolved and out of scope.
+- Exact app-wide color tokens are still not globally approved.
+- Existing file `lib/presentation/trades/trade_form_dialog.dart` is over the
+  300-line target, but it was not changed in this slice.
 
 ## Verification
 
-No verification command was run during review. Slice 15 verification was already
+No verification command was run during review. Slice 16 verification was already
 run during execute:
 
-- `flutter pub get` passed
-- `dart format .` passed, 2 files changed
+- `dart format .` passed
 - `flutter analyze` passed, no issues found
 - `flutter test` passed, 42 tests
 
 ## Suggested Commit Message
 
 ```text
-feat: show dashboard session breakdown
+feat: overhaul dashboard cockpit UI
 ```
 
 ## Recommended Next Mode
@@ -86,5 +84,5 @@ feat: show dashboard session breakdown
 
 ## Reason
 
-Slice 15 is complete and reviewed. The next slice should be defined explicitly
+Slice 16 is complete and reviewed. The next slice should be defined explicitly
 before implementation starts.
